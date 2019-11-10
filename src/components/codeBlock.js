@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 
-require('codemirror/mode/xml/xml');
+require('codemirror/mode/javascript/javascript');
 
 const example = `\
 {
@@ -31,22 +31,22 @@ const CodeBlock = ({ className }) => (
   <CodeMirror
     value={example}
     options={{
-      mode: 'html',
+      mode: 'javascript',
       theme: 'eclipse',
       lineNumbers: true,
     }}
-    onChange={(editor, data, value) => {
-    }}
+    // onChange={(editor, data, value) => {
+    // }}
     className={className}
   />
 );
 
 CodeBlock.defaultProps = {
   className: '',
-}
+};
 
 CodeBlock.propTypes = {
   className: PropTypes.string,
-}
+};
 
 export default CodeBlock;

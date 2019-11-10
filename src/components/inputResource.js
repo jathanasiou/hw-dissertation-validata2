@@ -21,7 +21,7 @@ class InputResource extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: 'url',
+      mode: 'raw',
     };
   }
 
@@ -50,7 +50,7 @@ class InputResource extends React.Component {
       ])
     } else {
       input = (
-        <CodeBlock className="m-2 border border-secondary"lineNumbers={true} />
+        <CodeBlock className="border border-secondary"lineNumbers={true} />
       )
     }
 
