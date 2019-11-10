@@ -55,7 +55,7 @@ class InputResource extends React.Component {
     }
 
     return (
-      <Col xs={12} className="m-1 border border-primary">
+      <Col xs={12} className="border border-primary">
         <Row>
           <Col>
             <h2 className="text-muted">RDF Input</h2>
