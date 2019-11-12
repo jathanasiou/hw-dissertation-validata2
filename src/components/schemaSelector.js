@@ -19,7 +19,6 @@ class SchemaSelector extends React.Component {
     this.setState({
       selection: schemas[eventKey].name
     })
-    console.log(this)
     this.props.onChange(schemas[eventKey])
   }
 
@@ -29,10 +28,12 @@ class SchemaSelector extends React.Component {
   }
 
   render() {
+    const { size } = this.props;
     const { selection } = this.state;
 
     return (
       <DropdownButton
+        size={size}
         title={selection || 'Select a schema'}
         variant="info"
         id="schema-selector"
@@ -49,7 +50,7 @@ class SchemaSelector extends React.Component {
 
 
 SchemaSelector.propTypes = {
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
 };
 
 

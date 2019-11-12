@@ -1,12 +1,15 @@
 import React from 'react';
-import { Row, Col, Tabs, Tab, Button, InputGroup, FormControl } from 'react-bootstrap';
-import Octicon, { Globe } from '@primer/octicons-react'
-import CodeBlock from './codeBlock'
+import PropTypes from 'prop-types';
+import {
+  Row, Col, Tabs, Tab, Button, InputGroup, FormControl,
+} from 'react-bootstrap';
+import Octicon, { Globe } from '@primer/octicons-react';
+import CodeBlock from './codeBlock';
 
 // TODO make input modes into TABs instead
 function ControlledTabs(key, setKey) {
   return (
-    <Tabs id="controlled-tab-example" activeKey={key} onSelect={k => setKey(k)}>
+    <Tabs id="controlled-tab-example" activeKey={key} onSelect={(k) => setKey(k)}>
       <Tab eventKey="url" title="URL resource">
         abc
       </Tab>
@@ -26,13 +29,13 @@ class InputResource extends React.Component {
   }
 
   toggleMode = () => {
-    console.log('CALLED.')
     const { mode } = this.state;
     if (mode === 'url') this.setState({ mode: 'raw' });
     if (mode === 'raw') this.setState({ mode: 'url' });
-  }
+  };
 
   render() {
+    const { onCodeChange, rawCode } = this.props;
     const { mode } = this.state;
     let input;
 
@@ -46,12 +49,12 @@ class InputResource extends React.Component {
             </InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl id="basic-url" placeholder="https://synbiohub.org/public/igem/BBa_K165005/1" aria-describedby="basic-url-addon" />
-        </InputGroup>
-      ])
+        </InputGroup>,
+      ]);
     } else {
       input = (
-        <CodeBlock className="border border-secondary"lineNumbers={true} />
-      )
+        <CodeBlock value={rawCode} onChange={onCodeChange} className="border border-secondary" />
+      );
     }
 
     return (
@@ -73,5 +76,14 @@ class InputResource extends React.Component {
     );
   }
 }
+
+InputResource.defaultProps = {
+  rawCode: '',
+};
+
+InputResource.propTypes = {
+  onCodeChange: PropTypes.func.isRequired,
+  rawCode: PropTypes.string,
+};
 
 export default InputResource;

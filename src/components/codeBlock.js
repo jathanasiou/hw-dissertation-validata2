@@ -1,51 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { UnControlled as CodeMirror } from 'react-codemirror2';
+import { Controlled as CodeMirror } from 'react-codemirror2';
 
 require('codemirror/mode/javascript/javascript');
 
-const example = `\
-{
-  "identifier": [
-    "yfp"
-  ],
-  "mainEntity": {
-    "@type": "https://bioschemas.org/BioChemEntity",
-    "identifier": "yfp",
-    "hasBioChemRole": [
-      "http://identifiers.org/so/SO:0000316",
-      "http://wiki.synbiohub.org/wiki/Terms/igem#partType/Coding"
-    ],
-    "url": "https://synbiohub.org/public/igem/BBa_K165005/1",
-    "description": "Venus YFP, yeast optimized for fusion<br/>"
-  },
-  "url": "https://synbiohub.org/public/igem/BBa_K165005/1",
-  "@context": {
-    "scheme": "http://schema.org/",
-    "bs": "http://bioschema.org/"
-  },
-  "@type": "https://bioschemas.org/DataRecord"
-}`;
 
-const CodeBlock = ({ className }) => (
+const CodeBlock = ({
+  value, className, lineNumbers, onChange,
+}) => (
   <CodeMirror
-    value={example}
+    value={value}
+    className={className}
     options={{
       mode: 'javascript',
       theme: 'eclipse',
-      lineNumbers: true,
+      lineNumbers,
     }}
-    // onChange={(editor, data, value) => {
-    // }}
-    className={className}
+    onBeforeChange={(editor, data, value) => onChange(value)}
   />
 );
 
 CodeBlock.defaultProps = {
+  lineNumbers: true,
+  value: '',
   className: '',
 };
 
 CodeBlock.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  lineNumbers: PropTypes.bool,
+  value: PropTypes.string,
   className: PropTypes.string,
 };
 
