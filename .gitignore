@@ -302,4 +302,5 @@ jspm_packages/
 .env
 
 # build output
-dist
+dist/
+build/
