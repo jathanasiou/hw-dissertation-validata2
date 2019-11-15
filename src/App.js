@@ -5,7 +5,10 @@ import {
 import InputResource from './components/inputResource';
 import ResultsPanel from './components/resultsPanel';
 import SchemaSelect from './components/schemaSelector';
+import validator from './validator';
+import schemas from './schemas';
 // import logo from './logo.svg';
+
 
 const jsonldToolExample = `\
 {
@@ -67,12 +70,14 @@ const jsonldToolExample = `\
     }
 }`;
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      schema: null,
+      schemaKey: null,
       rawCode: jsonldToolExample,
+      validationResult: null,
     };
   }
 
@@ -80,13 +85,24 @@ class App extends React.Component {
     this.setState({ rawCode: code });
   };
 
-  schemaSelection = (schema) => {
-    this.setState({ schema });
+  schemaSelection = (schemaKey) => {
+    this.setState({ schemaKey });
+  };
+
+  runValidation = () => {
+    const { schemaKey, rawCode } = this.state;
+    // console.log('schemas[schemaKey]',  schemas[schemaKey]);
+    // console.log('JSON.parse(rawCode)',  JSON.parse(rawCode));
+    validator.validate(schemas[schemaKey], JSON.parse(rawCode))
+      .then((validationResult) => {
+        this.setState({ validationResult });
+        // console.log(validationResult);
+      });
   };
 
   render() {
-    const { schema, rawCode } = this.state;
-    const validateBtnDisabled = !schema;
+    const { schemaKey, rawCode, validationResult } = this.state;
+    const validateBtnDisabled = schemaKey === null;
 
     return (
       <Container>
@@ -95,12 +111,12 @@ class App extends React.Component {
           <InputResource rawCode={rawCode} onCodeChange={this.codeChange} />
         </Row>
         <Row className="justify-content-between">
-          <Col xs="6"><SchemaSelect onChange={this.schemaSelection} size="lg" /></Col>
-          <Col xs="auto"><Button disabled={validateBtnDisabled} size="lg">Validate</Button></Col>
+          <Col xs="3"><SchemaSelect onChange={this.schemaSelection} size="lg" /></Col>
+          <Col xs="auto"><Button onClick={this.runValidation} disabled={validateBtnDisabled} size="lg">Validate</Button></Col>
         </Row>
         <Row className="justify-content-end">
           <Col xs={6}>
-            <ResultsPanel />
+            <ResultsPanel validationResult={validationResult} />
           </Col>
         </Row>
       </Container>
