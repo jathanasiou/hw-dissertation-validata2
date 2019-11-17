@@ -5,6 +5,7 @@ import {
 import InputResource from './components/inputResource';
 import ResultsPanel from './components/resultsPanel';
 import SchemaSelect from './components/schemaSelector';
+import ErrorWindow from './components/errorWindow';
 import validator from './validator';
 import schemas from './schemas';
 // import logo from './logo.svg';
@@ -78,6 +79,7 @@ class App extends React.Component {
       schemaKey: null,
       rawCode: jsonldToolExample,
       validationResult: null,
+      validationError: null,
     };
   }
 
@@ -91,33 +93,35 @@ class App extends React.Component {
 
   runValidation = () => {
     const { schemaKey, rawCode } = this.state;
-    // console.log('schemas[schemaKey]',  schemas[schemaKey]);
-    // console.log('JSON.parse(rawCode)',  JSON.parse(rawCode));
     validator.validate(schemas[schemaKey], JSON.parse(rawCode))
       .then((validationResult) => {
         this.setState({ validationResult });
-        // console.log(validationResult);
+      })
+      .catch((error) => {
+        alert(error);
+        // TODO: change to modal error window
+        // console.log('Got error',error.message())
+        // this.setState({validationError: error})
       });
   };
 
   render() {
-    const { schemaKey, rawCode, validationResult } = this.state;
+    const {
+      schemaKey, rawCode, validationResult, validationError,
+    } = this.state;
     const validateBtnDisabled = schemaKey === null;
+    const validateBtn = (<Button onClick={this.runValidation} disabled={validateBtnDisabled} size="lg">Validate</Button>);
 
     return (
       <Container>
+        <ErrorWindow show={!!validationError} message={validationError} />
         <h1>Validata 2 Validator tool</h1>
         <Row>
           <InputResource rawCode={rawCode} onCodeChange={this.codeChange} />
         </Row>
-        <Row className="justify-content-between">
-          <Col xs="3"><SchemaSelect onChange={this.schemaSelection} size="lg" /></Col>
-          <Col xs="auto"><Button onClick={this.runValidation} disabled={validateBtnDisabled} size="lg">Validate</Button></Col>
-        </Row>
-        <Row className="justify-content-end">
-          <Col xs={6}>
-            <ResultsPanel validationResult={validationResult} />
-          </Col>
+        <Row>
+          <Col xs="5"><SchemaSelect onChange={this.schemaSelection} validateButton={validateBtn} /></Col>
+          <Col><ResultsPanel validationResult={validationResult} /></Col>
         </Row>
       </Container>
     );

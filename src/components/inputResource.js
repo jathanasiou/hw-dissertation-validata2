@@ -61,11 +61,11 @@ class InputResource extends React.Component {
       <Col xs={12} className="border border-primary">
         <Row>
           <Col>
-            <h2 className="text-muted">RDF Input</h2>
+            <h2 className="text-muted">JSON-LD Input</h2>
           </Col>
         </Row>
         <Row className="justify-content-center">
-          <Button onClick={this.toggleMode}>Toggle Input Type</Button>
+          {/*<Button onClick={this.toggleMode}>Toggle Input Type</Button>*/}
         </Row>
         <Row>
           <Col>
