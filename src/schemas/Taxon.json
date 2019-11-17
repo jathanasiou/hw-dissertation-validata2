@@ -1,6 +1,6 @@
 {
-    "title": "Taxon (v0.3)",
-    "description": "This profile aims to denote a taxon by common properties such as its scientific name, authority, taxonomic rank and vernacular names. It is also a means to link to existing taxonomic registers where each taxon has a URI.",
+    "title": "Taxon (v0.4-DRAFT) Draft",
+    "description": "This profile aims to denote a taxon by common properties such as its scientific name, taxonomic rank and vernacular names. It is also a means to link to existing taxonomic registers where each taxon has a URI. <br/>Changes in 0.4: <ul><li>taxonRank promoted to minimal marginality</li><li>parentTaxon, childTaxon and taxonRank are moved to namespace schema.org.</li><li>scientificName and scientificNameAuthorship removed</li></ul>",
     "type": "object",
     "definitions": {
         "Boolean": {
@@ -30,8 +30,8 @@
             "type": "string"
         },
         "Taxon": {
-            "title": "Taxon (v0.3) Minimum Version",
-            "description": "This profile aims to denote a taxon by common properties such as its scientific name, authority, taxonomic rank and vernacular names. It is also a means to link to existing taxonomic registers where each taxon has a URI.",
+            "title": "Taxon (v0.4-DRAFT) Minimum Version",
+            "description": "This profile aims to denote a taxon by common properties such as its scientific name, taxonomic rank and vernacular names. It is also a means to link to existing taxonomic registers where each taxon has a URI. <br/>Changes in 0.4: <ul><li>taxonRank promoted to minimal marginality</li><li>parentTaxon, childTaxon and taxonRank are moved to namespace schema.org.</li><li>scientificName and scientificNameAuthorship removed</li></ul>",
             "type": "object",
             "properties": {
                 "@context": {
@@ -49,7 +49,7 @@
                     "type": "string"
                 },
                 "dct:conformsTo": {
-                    "default": "https://bioschemas.org/specifications/Taxon/0.3",
+                    "default": "https://bioschemas.org/specifications/Taxon/0.4-DRAFT",
                     "options": {
                         "hidden": "true"
                     },
@@ -58,20 +58,43 @@
                 "name": {
                     "title": "name (Minimum)",
                     "propertyOrder": 1,
-                    "description": "Bioschemas: Taxon name without authorship nor date information of the currently valid (zoological) or accepted (botanical) taxon. Schema.org: The name of the item. ",
+                    "description": "Bioschemas: Currently valid (zoological) or accepted (botanical) name for that taxon, with authorship and date information if known. Schema.org: The name of the item. ",
                     "oneOf": [
                         {
                             "title": "Text",
                             "$ref": "#/definitions/Text"
                         }
                     ]
+                },
+                "taxonRank": {
+                    "title": "taxonRank (Minimum)",
+                    "propertyOrder": 1,
+                    "description": "Schema.org: The taxonomic rank of this taxon given preferably as a URI from a controlled vocabulary (e.g. the ranks from TDWG TaxonRank ontology or equivalent Wikidata URIs) ",
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "title": "Text",
+                                "$ref": "#/definitions/Text"
+                            },
+                            {
+                                "title": "PropertyValue",
+                                "$ref": "#/definitions/PropertyValue"
+                            },
+                            {
+                                "title": "URL",
+                                "$ref": "#/definitions/URL"
+                            }
+                        ]
+                    }
                 }
             },
             "required": [
                 "@type",
                 "@context",
                 "dct:conformsTo",
-                "name"
+                "name",
+                "taxonRank"
             ]
         },
         "CategoryCode": {
@@ -135,7 +158,7 @@
             "type": "string"
         },
         "dct:conformsTo": {
-            "default": "https://bioschemas.org/specifications/Taxon/0.3",
+            "default": "https://bioschemas.org/specifications/Taxon/0.4-DRAFT",
             "options": {
                 "hidden": "true"
             },
@@ -158,7 +181,7 @@
         "alternateName": {
             "title": "alternateName (Optional)",
             "propertyOrder": 3,
-            "description": "Bioschemas: Scientific name, possibly including authorship and date information, of a synonym of the currently valid (zoological) or accepted (botanical) taxon. Schema.org: An alias for the item. ",
+            "description": "Bioschemas: Scientific name, with authorship and date information if known, of a synonym of the currently valid (zoological) or accepted (botanical) name. Schema.org: An alias for the item. ",
             "type": "array",
             "items": {
                 "oneOf": [
@@ -208,7 +231,7 @@
         "name": {
             "title": "name (Minimum)",
             "propertyOrder": 1,
-            "description": "Bioschemas: Taxon name without authorship nor date information of the currently valid (zoological) or accepted (botanical) taxon. Schema.org: The name of the item. ",
+            "description": "Bioschemas: Currently valid (zoological) or accepted (botanical) name for that taxon, with authorship and date information if known. Schema.org: The name of the item. ",
             "oneOf": [
                 {
                     "title": "Text",
@@ -249,32 +272,10 @@
                 ]
             }
         },
-        "scientificName": {
-            "title": "scientificName (Optional)",
-            "propertyOrder": 3,
-            "description": "Bioschemas: Full scientific name, with authorship and date information if know, of the currently valid (zoological) or accepted (botanical) taxon. ",
-            "oneOf": [
-                {
-                    "title": "Text",
-                    "$ref": "#/definitions/Text"
-                }
-            ]
-        },
-        "scientificNameAuthorship": {
-            "title": "scientificNameAuthorship (Optional)",
-            "propertyOrder": 3,
-            "description": "Bioschemas: Authorship information for the scientificName formatted according to the conventions of the applicable nomenclatural Code. Example: \"(Torr.) J.T. Howell\", \"(Martinovsk\u00fd) Tzvelev\", \"(Gy\u00f6rfi, 1952)\" ",
-            "oneOf": [
-                {
-                    "title": "Text",
-                    "$ref": "#/definitions/Text"
-                }
-            ]
-        },
         "taxonRank": {
-            "title": "taxonRank (Recommended)",
-            "propertyOrder": 2,
-            "description": "Schema.org: The taxonomic rank of this taxon given preferably as a URI from a controlled vocabulary (typically the ranks from TDWG TaxonRank ontology or equivalent Wikidata URIs) ",
+            "title": "taxonRank (Minimum)",
+            "propertyOrder": 1,
+            "description": "Schema.org: The taxonomic rank of this taxon given preferably as a URI from a controlled vocabulary (e.g. the ranks from TDWG TaxonRank ontology or equivalent Wikidata URIs) ",
             "type": "array",
             "items": {
                 "oneOf": [
@@ -323,6 +324,7 @@
         "@type",
         "@context",
         "dct:conformsTo",
-        "name"
+        "name",
+        "taxonRank"
     ]
 }
