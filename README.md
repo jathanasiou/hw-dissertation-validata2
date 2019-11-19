@@ -1,8 +1,19 @@
+# Validata2
+
+Validation of RDF documents with Bioschemas profiles. Supports:
+
+* JSON-LD serialized documents
+* User input with on-the-fly editing
+* Missing/invalid properties output
+* ___Work in progress___ RDFs embedded in web page markup
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
-In the project directory, you can run:
+### `nmp install`
+
+Required as a first step to download dependencies after checkout, or any changes in `package.json`.
 
 ### `npm start`
 
