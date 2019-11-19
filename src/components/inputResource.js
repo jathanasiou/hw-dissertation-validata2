@@ -1,30 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Row, Col, Tabs, Tab, Button, InputGroup, FormControl,
+  Tabs, Tab, InputGroup, FormControl,
 } from 'react-bootstrap';
-import Octicon, { Globe } from '@primer/octicons-react';
+import Octicon, { Globe, Code } from '@primer/octicons-react';
 import CodeBlock from './codeBlock';
-
-// TODO make input modes into TABs instead
-function ControlledTabs(key, setKey) {
-  return (
-    <Tabs id="controlled-tab-example" activeKey={key} onSelect={(k) => setKey(k)}>
-      <Tab eventKey="url" title="URL resource">
-        abc
-      </Tab>
-      <Tab eventKey="raw" title="Raw code {}">
-        abc
-      </Tab>
-    </Tabs>
-  );
-}
 
 class InputResource extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       mode: 'raw',
+      tabKey: 'raw',
     };
   }
 
@@ -34,45 +21,57 @@ class InputResource extends React.Component {
     if (mode === 'raw') this.setState({ mode: 'url' });
   };
 
+  onTabChange = (eventKey) => {
+    this.setState({ tabKey: eventKey });
+  };
+
   render() {
     const { onCodeChange, rawCode } = this.props;
-    const { mode } = this.state;
-    let input;
+    const { tabKey } = this.state;
 
-    if (mode === 'url') {
-      input = ([
-        <label htmlFor="basic-url">Type a URL below:</label>,
-        <InputGroup className="mb-3">
+    const urlInput = (
+      <>
+        <div className="alert alert-warning mt-1 font-italic">Work in progress</div>
+        <label htmlFor="basic-url">Type a URL below to retrieve embedded JSON-LD from</label>
+        <InputGroup>
           <InputGroup.Prepend>
             <InputGroup.Text id="basic-url-addon">
               <Octicon icon={Globe} ariaLabel="Web address input" />
             </InputGroup.Text>
           </InputGroup.Prepend>
-          <FormControl id="basic-url" placeholder="https://synbiohub.org/public/igem/BBa_K165005/1" aria-describedby="basic-url-addon" />
-        </InputGroup>,
-      ]);
-    } else {
-      input = (
-        <CodeBlock value={rawCode} onChange={onCodeChange} className="border border-secondary" />
-      );
-    }
+          <FormControl disabled id="basic-url" placeholder="https://synbiohub.org/public/igem/BBa_K165005/1" aria-describedby="basic-url-addon" />
+        </InputGroup>
+      </>
+    );
+    const codeInput = (
+      <CodeBlock value={rawCode} onChange={onCodeChange} className="border border-secondary" />
+    );
+    const pageInputTabTitle = (
+      <span>
+        <Octicon className="inline-icon size20" verticalAlign="middle" icon={Globe} ariaLabel="web page input" />
+        <span>Web page</span>
+      </span>
+    );
+
+    const rawInputTabTitle = (
+      <span>
+        <Octicon className="inline-icon size20" verticalAlign="middle" icon={Code} ariaLabel="Code input" />
+        <span>JSON-LD code</span>
+      </span>
+    );
 
     return (
-      <Col xs={12} className="border border-primary">
-        <Row>
-          <Col>
-            <h2 className="text-muted">JSON-LD Input</h2>
-          </Col>
-        </Row>
-        <Row className="justify-content-center">
-          {/*<Button onClick={this.toggleMode}>Toggle Input Type</Button>*/}
-        </Row>
-        <Row>
-          <Col>
-            {input}
-          </Col>
-        </Row>
-      </Col>
+      <div className="border-bottom pb-2">
+        <h3>RDF data source</h3>
+        <Tabs id="controlled-input-tab" activeKey={tabKey} onSelect={(k) => this.onTabChange(k)}>
+          <Tab eventKey="url" title={pageInputTabTitle}>
+            {urlInput}
+          </Tab>
+          <Tab eventKey="raw" title={rawInputTabTitle}>
+            {codeInput}
+          </Tab>
+        </Tabs>
+      </div>
     );
   }
 }

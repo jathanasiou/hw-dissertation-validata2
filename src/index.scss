@@ -14,7 +14,26 @@ code {
     monospace;
 }
 
+button:disabled,
+button[disabled]{
+	cursor: not-allowed;
+}
+
 // bottom margin for all rows
 .row {
 	@extend .mb-2;
+}
+
+.inline-icon {
+	@extend .mx-1;
+}
+
+.inline-icon.size20 {
+	width: 20px;
+	height: 20px;
+}
+
+.inline-icon.size30 {
+	width: 30px;
+	height: 30px;
 }

@@ -17,9 +17,8 @@ const ResultsPanel = ({ validationResult }) => {
 
   return (
     <Card>
-      {/* TODO improve Icon+Text rendering */}
       <Card.Header as="h5">
-        <Octicon size="medium" className="mr-2" icon={Report} ariaLabel="Validation Report panel" />
+        <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Report} ariaLabel="Validation Report panel" />
         <span>Validation Report</span>
       </Card.Header>
       <Card.Body>

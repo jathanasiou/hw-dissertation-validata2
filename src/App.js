@@ -93,12 +93,23 @@ class App extends React.Component {
 
   runValidation = () => {
     const { schemaKey, rawCode } = this.state;
-    validator.validate(schemas[schemaKey], JSON.parse(rawCode))
+    let profile;
+    try {
+      profile = JSON.parse(rawCode);
+    } catch (err) {
+      console.error(err);
+      alert('Problem with parsing the JSON-LD code.');
+      // TODO: change to modal error window
+      // console.log('Got error',error.message())
+      // this.setState({validationError: error})
+    }
+    validator.validate(schemas[schemaKey], profile)
       .then((validationResult) => {
         this.setState({ validationResult });
       })
-      .catch((error) => {
-        alert(error);
+      .catch((err) => {
+        console.error(err);
+        alert(err);
         // TODO: change to modal error window
         // console.log('Got error',error.message())
         // this.setState({validationError: error})
@@ -109,7 +120,7 @@ class App extends React.Component {
     const {
       schemaKey, rawCode, validationResult, validationError,
     } = this.state;
-    const validateBtnDisabled = schemaKey === null;
+    const validateBtnDisabled = (schemaKey === null) || !rawCode;
     const validateBtn = (<Button onClick={this.runValidation} disabled={validateBtnDisabled} size="lg">Validate</Button>);
 
     return (
@@ -117,7 +128,9 @@ class App extends React.Component {
         <ErrorWindow show={!!validationError} message={validationError} />
         <h1>Validata 2 Validator tool</h1>
         <Row>
-          <InputResource rawCode={rawCode} onCodeChange={this.codeChange} />
+          <Col xs="12">
+            <InputResource rawCode={rawCode} onCodeChange={this.codeChange} />
+          </Col>
         </Row>
         <Row>
           <Col xs="5"><SchemaSelect onChange={this.schemaSelection} validateButton={validateBtn} /></Col>
