@@ -5,7 +5,7 @@ import {
 } from 'react-bootstrap';
 
 const ErrorWindow = ({
-  title, message, show
+  title, message, show,
 }) => (
   <Modal show={show}>
     <Modal.Header closeButton>
@@ -29,7 +29,7 @@ ErrorWindow.defaultProps = {
 };
 
 ErrorWindow.propTypes = {
-	show: PropTypes.bool,
+  show: PropTypes.bool,
   title: PropTypes.string,
   message: PropTypes.string.isRequired,
 };
