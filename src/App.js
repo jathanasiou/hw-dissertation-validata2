@@ -103,17 +103,6 @@ class App extends React.Component {
       // console.log('Got error',error.message())
       // this.setState({validationError: error})
     }
-    validator.validate(schemas[schemaKey], profile)
-      .then((validationResult) => {
-        this.setState({ validationResult });
-      })
-      .catch((err) => {
-        console.error(err);
-        alert(err);
-        // TODO: change to modal error window
-        // console.log('Got error',error.message())
-        // this.setState({validationError: error})
-      });
   };
 
   render() {
