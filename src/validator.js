@@ -24,6 +24,8 @@ const schemaDataset = `PREFIX schema: <http://schema.org/>
     <URL> 
       xsd:string OR IRI
     
+start = @<DatasetMinimum>
+
 <DatasetMinimum> {
   rdf:type [schema:Dataset] ;
   schema:description xsd:string  ;
