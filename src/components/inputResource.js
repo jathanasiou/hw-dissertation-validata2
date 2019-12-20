@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import {
   Tabs, Tab, InputGroup, FormControl,
@@ -30,7 +30,7 @@ class InputResource extends React.Component {
     const { tabKey } = this.state;
 
     const urlInput = (
-      <>
+      <Fragment>
         <div className="alert alert-warning mt-1 font-italic">Work in progress</div>
         <label htmlFor="basic-url">Type a URL below to retrieve embedded JSON-LD from</label>
         <InputGroup>
@@ -41,7 +41,7 @@ class InputResource extends React.Component {
           </InputGroup.Prepend>
           <FormControl disabled id="basic-url" placeholder="https://synbiohub.org/public/igem/BBa_K165005/1" aria-describedby="basic-url-addon" />
         </InputGroup>
-      </>
+      </Fragment>
     );
     const codeInput = (
       <CodeBlock value={rawCode} onChange={onCodeChange} className="border border-secondary" />
@@ -56,7 +56,7 @@ class InputResource extends React.Component {
     const rawInputTabTitle = (
       <span>
         <Octicon className="inline-icon size20" verticalAlign="middle" icon={Code} ariaLabel="Code input" />
-        <span>JSON-LD code</span>
+        <span>Turtle code</span>
       </span>
     );
 

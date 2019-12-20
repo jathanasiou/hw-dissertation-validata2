@@ -7,6 +7,8 @@
     "bootstrap": "^4.4.1",
     "codemirror": "^5.49.2",
     "elixir-jsonschema-validator": "^1.5.0",
+    "jsonld": "^2.0.1",
+    "n3": "0.11.3",
     "node-sass": "^4.13.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",

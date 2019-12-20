@@ -15,23 +15,19 @@ const ErrorWindow = ({
     <Modal.Body>
       <p>{message}</p>
     </Modal.Body>
-
-    {/* <Modal.Footer>
-	    <Button variant="secondary">Close</Button>
-	    <Button variant="primary">Save changes</Button>
-	  </Modal.Footer> */}
   </Modal>
 );
 
 ErrorWindow.defaultProps = {
   title: 'Error',
   show: false,
+  message: null,
 };
 
 ErrorWindow.propTypes = {
   show: PropTypes.bool,
   title: PropTypes.string,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
 };
 
 export default ErrorWindow;
