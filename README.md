@@ -2,11 +2,14 @@
 
 Validation of RDF documents with Bioschemas profiles. Supports:
 
-* JSON-LD serialized documents
+* Turtle-serialized RDF documents
+* Profile validation with ShEx definitions
 * User input with on-the-fly editing
 * Missing/invalid properties output
-* ___Work in progress___ RDFs embedded in web page markup
+* ___Work in progress___ RDFs embedded in web page markup via http://lxbisel.macs.hw.ac.uk:8080/
 
+
+<hr>
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
