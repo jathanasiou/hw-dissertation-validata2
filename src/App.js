@@ -7,8 +7,7 @@ import ResultsPanel from './components/resultsPanel';
 import SchemaSelect from './components/schemaSelector';
 import ErrorWindow from './components/errorWindow';
 import validator from './validator';
-import schemas from './schemas';
-// import logo from './logo.svg';
+import schemasProvider from './schemas';
 
 
 const jsonldToolExample = `
@@ -44,14 +43,15 @@ class App extends React.Component {
     this.setState({ schemaKey });
   };
 
-  runValidation = () => {
+  runValidation = async () => {
     const { schemaKey, rawCode } = this.state;
     let profile;
     try {
-      profile = JSON.parse(rawCode);
+      profile = (await schemasProvider()).find((schema) => schema.name === schemaKey);
+      console.log('Validating with schema:', schemaKey);
     } catch (err) {
       console.error(err);
-      alert('Problem with parsing the JSON-LD code.');
+      alert('Problem with parsing the Bioschemas profile.');
       // TODO: change to modal error window
       // console.log('Got error',error.message())
       // this.setState({validationError: error})

@@ -5,12 +5,13 @@
   "dependencies": {
     "@primer/octicons-react": "^9.3.1",
     "bootstrap": "^4.4.1",
-    "codemirror": "^5.49.2",
+    "codemirror": "^5.50.2",
     "elixir-jsonschema-validator": "^1.5.0",
     "jsonld": "^2.0.1",
     "n3": "0.11.3",
     "node-sass": "^4.13.0",
     "prop-types": "^15.7.2",
+    "query-string": "^6.9.0",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-codemirror2": "^6.0.0",
@@ -41,11 +42,11 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^6.7.2",
+    "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-babel": "^5.3.0",
-    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-import": "^2.20.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^2.3.0"

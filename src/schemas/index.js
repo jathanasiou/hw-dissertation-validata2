@@ -7,7 +7,7 @@ const nameOf = (key) => key.match(/\w+/g)[0];
 // returns promise of an object with profile's name, and its file's content
 const keyToResourceItem = async (key) => ({
   name: nameOf(key),
-  content: await fetch(context(key)),
+  content: await (await fetch(context(key))).text(),
 });
 
 let schemas = false;

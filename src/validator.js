@@ -203,18 +203,16 @@ const runValidation = async (schema, data) => {
   let result;
   if (schema && data) {
     const parsedSchema = parseSchema('', schema);
-    console.log(parsedSchema);
     const triples = await parseData(data);
     const validator = shex.Validator.construct(parsedSchema);
     const shape = shex.Validator.start;
-    console.log(shape);
     result = validator.validate(shex.Util.makeN3DB(triples), 'http://hl7.org/ObservationShapeSOMEDOMAIN', shape);
   }
-  console.log(result);
+  console.log('Validation result:', result);
   return result;
 };
 
-  runValidation(schemaObservation, dataObservationGood);
-  runValidation(schemaDataset, dataDataset);
+runValidation(schemaObservation, dataObservationGood);
+runValidation(schemaDataset, dataDataset);
 
 export default runValidation;
