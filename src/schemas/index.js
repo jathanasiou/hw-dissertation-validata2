@@ -1,20 +1,20 @@
-const profiles = [];
-const context = require.context('./', true, /\.json$/);
-context.keys().forEach((key) => {
-  profiles.push(context(key));
+// the list of profile files, as static resources byndled by webpack
+const context = require.context('./', true, /\.shex$/);
+
+// deriving profile name from filename minus extension
+const nameOf = (key) => key.match(/\w+/g)[0];
+
+// returns promise of an object with profile's name, and its file's content
+const keyToResourceItem = async (key) => ({
+  name: nameOf(key),
+  content: await fetch(context(key)),
 });
 
+let schemas = false;
 
-// temporary fix for {format: "text"} attributes
-profiles.forEach((profile) => {
-  if (!profile.definitions) return;
-  Object.values(profile.definitions).forEach((definition) => {
-    if (!definition) return;
-    if (definition.format === 'text') {
-      delete definition.format;
-    }
-  });
-});
-
-
-export default profiles;
+export default async () => {
+  if (!schemas) {
+    schemas = await Promise.all(context.keys().map(keyToResourceItem));
+  }
+  return schemas;
+};
