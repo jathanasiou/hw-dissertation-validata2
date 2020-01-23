@@ -4,7 +4,9 @@ PREFIX schema: <http://schema.org/>
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
     <URL> 
       xsd:string OR IRI
-    
+
+start = @<JournalMinimum>
+
 <JournalMinimum> {
   rdf:type [schema:Periodical] ;
   schema:identifier @<URL>  ;

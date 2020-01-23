@@ -1,0 +1,61 @@
+PREFIX schema: <http://schema.org/> 
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+    <URL> 
+      xsd:string OR IRI
+    
+<ProteinMinimum> {
+  rdf:type [schema:Protein] ;
+  schema:identifier xsd:string OR @<URL> OR {a [schema:PropertyValue]} OR IRI  ;
+  schema:name xsd:string  ;
+}
+
+<ProteinRecommended> {
+  rdf:type [schema:Protein] ;
+  schema:associatedDisease @<URL> OR @<MedicalConditionOrPropertyValue> OR IRI * ;
+  schema:description xsd:string ? ;
+  schema:hasRepresentation xsd:string OR @<URL> OR {a [schema:PropertyValue]} OR IRI * ;
+  schema:isEncodedByBioChemEntity  @<DNAOrGeneOrRNA> OR IRI * ;
+  schema:taxonomicRange xsd:string OR @<URL> OR @<CategoryCodeOrTaxon> OR IRI * ;
+  schema:url @<URL> ? ;
+}
+
+<ProteinOptional> {
+  rdf:type [schema:Protein] ;
+  schema:alternateName xsd:string * ;
+  schema:bioChemInteraction  {a [schema:BioChemEntity]} OR IRI * ;
+  schema:bioChemSimilarity  {a [schema:BioChemEntity]} OR IRI * ;
+  schema:hasBioChemEntityPart @<URL> OR {a [schema:BioChemEntity]} OR IRI * ;
+  schema:hasMolecularFunction @<URL> OR @<DefinedTermOrPropertyValue> OR IRI * ;
+  schema:image @<URL> OR {a [schema:ImageObject]} OR IRI * ;
+  schema:isInvolvedInBiologicalProcess @<URL> OR @<DefinedTermOrPropertyValue> OR IRI * ;
+  schema:isLocatedInSubcellularLocation @<URL> OR @<DefinedTermOrPropertyValue> OR IRI * ;
+  schema:isPartOfBioChemEntity  {a [schema:BioChemEntity]} OR IRI * ;
+  schema:mainEntityOfPage @<URL> OR {a [schema:CreativeWork]} OR IRI ? ;
+  schema:sameAs @<URL> * ;
+}
+
+<MedicalConditionOrPropertyValue>{
+  rdf:type [ schema:MedicalCondition schema:PropertyValue]
+}
+
+<DNAOrGeneOrRNA>{
+  rdf:type [ schema:DNA schema:Gene schema:RNA]
+}
+
+<CategoryCodeOrTaxon>{
+  rdf:type [ schema:CategoryCode schema:Taxon]
+}
+
+<DefinedTermOrPropertyValue>{
+  rdf:type [ schema:DefinedTerm schema:PropertyValue]
+}
+
+<DefinedTermOrPropertyValue>{
+  rdf:type [ schema:DefinedTerm schema:PropertyValue]
+}
+
+<DefinedTermOrPropertyValue>{
+  rdf:type [ schema:DefinedTerm schema:PropertyValue]
+}
