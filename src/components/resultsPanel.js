@@ -11,8 +11,8 @@ const ResultsPanel = ({ validationResult }) => {
     validationErrors = [];
     title = 'N/A';
   } else {
-    validationErrors = validationResult.validationErrors;
-    title = `${validationResult.validationState} | Errors: ${validationErrors.length}`;
+    validationErrors = validationResult.errors;
+    title = `${validationResult.type} | Errors: ${validationErrors.length}`;
   }
 
   return (
@@ -25,7 +25,9 @@ const ResultsPanel = ({ validationResult }) => {
         <Card.Title>{title}</Card.Title>
         <ListGroup variant="flush">
           {validationErrors.map((error, index) => (
-            <ListGroup.Item key={index}>{index + 1}: {error.userFriendlyMessage}</ListGroup.Item>
+            <ListGroup.Item key={index}>
+              {`${index + 1}: ${error.type} ${error.property}`}
+            </ListGroup.Item>
           ))}
         </ListGroup>
       </Card.Body>
