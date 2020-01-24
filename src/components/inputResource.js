@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
   Tabs, Tab, InputGroup, FormControl,
@@ -7,29 +7,22 @@ import Octicon, { Globe, Code } from '@primer/octicons-react';
 import CodeBlock from './codeBlock';
 
 class InputResource extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      mode: 'raw',
-      tabKey: 'raw',
-    };
-  }
 
-  toggleMode = () => {
-    const { mode } = this.state;
-    if (mode === 'url') this.setState({ mode: 'raw' });
-    if (mode === 'raw') this.setState({ mode: 'url' });
+  onTabChange = (tabKey) => {
+    this.setState({ tabKey });
+    this.props.onInputModeChange(tabKey);
   };
 
-  onTabChange = (eventKey) => {
-    this.setState({ tabKey: eventKey });
+  urlChange = (event) => {
+    this.props.onInputUrlChange(event.target.value);
   };
 
   render() {
-    const { onCodeChange, rawCode } = this.props;
-    const { tabKey } = this.state;
+    const {
+      onCodeChange, rawCode, inputUrl, inputMode,
+    } = this.props;
 
-    const urlInput = (
+    const urlInputControl = (
       <Fragment>
         <div className="alert alert-warning mt-1 font-italic">Work in progress</div>
         <label htmlFor="basic-url">Type a URL below to retrieve embedded JSON-LD from</label>
@@ -39,11 +32,17 @@ class InputResource extends React.Component {
               <Octicon icon={Globe} ariaLabel="Web address input" />
             </InputGroup.Text>
           </InputGroup.Prepend>
-          <FormControl disabled id="basic-url" placeholder="https://synbiohub.org/public/igem/BBa_K165005/1" aria-describedby="basic-url-addon" />
+          <FormControl
+            id="basic-url"
+            placeholder="https://myurl.com/RDF_entry"
+            aria-describedby="basic-url-addon"
+            onChange={this.urlChange}
+            value={inputUrl}
+          />
         </InputGroup>
       </Fragment>
     );
-    const codeInput = (
+    const codeInputControl = (
       <CodeBlock value={rawCode} onChange={onCodeChange} className="border border-secondary" />
     );
     const pageInputTabTitle = (
@@ -63,12 +62,12 @@ class InputResource extends React.Component {
     return (
       <div className="border-bottom pb-2">
         <h3>RDF data source</h3>
-        <Tabs id="controlled-input-tab" activeKey={tabKey} onSelect={(k) => this.onTabChange(k)}>
+        <Tabs id="controlled-input-tab" activeKey={inputMode} onSelect={(k) => this.onTabChange(k)}>
           <Tab eventKey="url" title={pageInputTabTitle}>
-            {urlInput}
+            {urlInputControl}
           </Tab>
-          <Tab eventKey="raw" title={rawInputTabTitle}>
-            {codeInput}
+          <Tab eventKey="code" title={rawInputTabTitle}>
+            {codeInputControl}
           </Tab>
         </Tabs>
       </div>
@@ -78,11 +77,16 @@ class InputResource extends React.Component {
 
 InputResource.defaultProps = {
   rawCode: '',
+  inputUrl: '',
 };
 
 InputResource.propTypes = {
-  onCodeChange: PropTypes.func.isRequired,
+  onInputModeChange: PropTypes.func.isRequired,
+  inputMode: PropTypes.string.isRequired, // one of 'code', 'url'
   rawCode: PropTypes.string,
+  onCodeChange: PropTypes.func.isRequired,
+  inputUrl: PropTypes.string,
+  onInputUrlChange: PropTypes.func.isRequired,
 };
 
 export default InputResource;
