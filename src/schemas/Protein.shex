@@ -4,7 +4,9 @@ PREFIX schema: <http://schema.org/>
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
     <URL> 
       xsd:string OR IRI
-    
+
+start = @<ProteinMinimum>
+
 <ProteinMinimum> {
   rdf:type [schema:Protein] ;
   schema:identifier xsd:string OR @<URL> OR {a [schema:PropertyValue]} OR IRI  ;
@@ -46,14 +48,6 @@ PREFIX schema: <http://schema.org/>
 
 <CategoryCodeOrTaxon>{
   rdf:type [ schema:CategoryCode schema:Taxon]
-}
-
-<DefinedTermOrPropertyValue>{
-  rdf:type [ schema:DefinedTerm schema:PropertyValue]
-}
-
-<DefinedTermOrPropertyValue>{
-  rdf:type [ schema:DefinedTerm schema:PropertyValue]
 }
 
 <DefinedTermOrPropertyValue>{
