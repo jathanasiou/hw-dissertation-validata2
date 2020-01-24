@@ -6,7 +6,7 @@ Validation of RDF documents with Bioschemas profiles. Supports:
 * Profile validation with ShEx definitions
 * User input with on-the-fly editing
 * Missing/invalid properties output
-* ___Work in progress___ RDFs embedded in web page markup via http://lxbisel.macs.hw.ac.uk:8080/
+* RDFs embedded in web page markup via http://lxbisel.macs.hw.ac.uk:8080/scraper/#api-Developers
 
 
 <hr>
