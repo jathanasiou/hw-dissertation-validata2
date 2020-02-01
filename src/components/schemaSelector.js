@@ -51,23 +51,19 @@ class SchemaSelector extends React.PureComponent {
     }));
 
     return (
-      <>
-        <Row>
-          <Col>
-            <Select
-              placeholder="Search or select a schema"
-              options={options}
-              onChange={this.itemSelected}
-              isClearable
-            />
-          </Col>
-        </Row>
-        <Row className="justify-content-end">
-          <Col xs="auto">
-            {validateButton}
-          </Col>
-        </Row>
-      </>
+      <Row>
+        <Col>
+          <Select
+            placeholder="Search or select a schema"
+            options={options}
+            onChange={this.itemSelected}
+            isClearable
+          />
+        </Col>
+        <Col xs="auto">
+          {validateButton}
+        </Col>
+      </Row>
     );
   }
 }

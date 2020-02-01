@@ -584,10 +584,10 @@ class App extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col xs="5">
+          <Col>
             <SchemaSelect onChange={this.schemaSelection} validateButton={validateBtn} />
           </Col>
-          <Col><ResultsPanel validationResult={validationResult} /></Col>
+          <Col xs="12"><ResultsPanel validationResult={validationResult} /></Col>
         </Row>
       </Container>
     );

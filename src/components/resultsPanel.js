@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, ListGroup } from 'react-bootstrap';
+import { Card, Table } from 'react-bootstrap';
 import Octicon, { Report } from '@primer/octicons-react';
+import errorLineItem from './errorLineItem';
 
 const ResultsPanel = ({ validationResult }) => {
   let title;
@@ -20,16 +21,23 @@ const ResultsPanel = ({ validationResult }) => {
       <Card.Header as="h5">
         <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Report} ariaLabel="Validation Report panel" />
         <span>Validation Report</span>
+        <span>{validationResult ? `: ${validationResult.shape}` : ''}</span>
       </Card.Header>
       <Card.Body>
         <Card.Title>{title}</Card.Title>
-        <ListGroup variant="flush">
-          {validationErrors.map((error, index) => (
-            <ListGroup.Item key={index}>
-              {`${index + 1}: ${error.type} ${error.property}`}
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
+        <Table bordered hover>
+          <thead>
+            <tr>
+              <th>Issue</th>
+              <th>Property</th>
+              <th>Validation</th>
+              <th>Expected</th>
+            </tr>
+          </thead>
+          <tbody>
+            {validationErrors.map(errorLineItem)}
+          </tbody>
+        </Table>
       </Card.Body>
     </Card>
   );
