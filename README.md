@@ -14,7 +14,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-### `nmp install`
+### `npm install`
 
 Required as a first step to download dependencies after checkout, or any changes in the `package.json` dependencies.
 
