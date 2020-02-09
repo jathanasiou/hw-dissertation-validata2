@@ -29,5 +29,10 @@ module.exports = {
       "controlComponents": ["FormControl"],
       "depth": 3,
     }],
+    "template-curly-spacing" : "off",
+    // fix for linting errors with string templates
+    "indent": ["error", 2, {
+      "ignoredNodes": ["TemplateLiteral"]
+    }],
   },
 };
