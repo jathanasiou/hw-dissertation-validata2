@@ -12,6 +12,10 @@ Validation of RDF documents with Bioschemas profiles. Supports:
 <hr>
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Structure
+
+Bioschemas Profiles (in the form of ShEx schemas) can be placed under `/src/schemas` and will be automatically made available by the index file. Webpack's configuration will also serve those files under `<hosted_url>/static/media/`.
+
 ## Available Scripts
 
 ### `npm install`
