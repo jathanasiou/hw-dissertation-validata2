@@ -7,6 +7,7 @@ import ResultsPanel from './components/resultsPanel';
 import SchemaSelect from './components/schemaSelector';
 import ErrorWindow from './components/errorWindow';
 import validator from './validator';
+import { validate } from './utils/validationHelper';
 import schemasProvider from './schemas';
 import scraper from './utils/webScraper';
 
@@ -45,7 +46,7 @@ class App extends React.Component {
     this.setState({ inputUrl: newUrl });
   };
 
-  schemaSelection = (schemaKey) => {
+  schemaSelectionChange = (schemaKey) => {
     this.setState({ schemaKey });
   };
 
@@ -62,7 +63,9 @@ class App extends React.Component {
         ? rawCode
         : (await scraper(inputUrl));
       validationResult = await validator(profile.content, codeRDF);
-      console.log('Validation done:', validationResult);
+      const validationResultRDFShape = await validate(profile.content, codeRDF);
+      console.log('Validation with Shex.js:', validationResult);
+      console.log('Validation with RDFShape:', validationResultRDFShape);
     } catch (err) {
       console.error(err);
       alert('Problem with parsing the Bioschemas profile.');
@@ -97,9 +100,12 @@ class App extends React.Component {
         </Row>
         <Row>
           <Col>
-            <SchemaSelect onChange={this.schemaSelection} validateButton={validateBtn} />
+            <SchemaSelect onChange={this.schemaSelectionChange} validateButton={validateBtn} />
+            { /* TODO: add Schema Preview */ }
           </Col>
-          <Col xs="12"><ResultsPanel validationResult={validationResult} /></Col>
+          <Col xs="12">
+            <ResultsPanel validationResult={validationResult} />
+          </Col>
         </Row>
       </Container>
     );
