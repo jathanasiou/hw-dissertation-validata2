@@ -1,7 +1,7 @@
 import qs from 'query-string';
 
 
-const API = 'http://shaclex.herokuapp.com/api';
+const API = 'http://rdfshape.weso.es:8080/api/';
 
 async function getFormats() {
   const requestEndpoint = qs.stringifyUrl({
@@ -17,12 +17,12 @@ async function validate(schema, rdf) {
       dataFormat: 'turtle',
       schemaFormat: 'ShExC',
       data: rdf,
+      schema,
       shapeMapFormat: 'compact',
       "shape-map": "<genid-c7a50d6e828f4595a195f9c67304f6d2-0AE87CB066C8D9CD43117E0C5A3090F0>@<DatasetMinimum>",
-      schema,
     },
   });
-  return (await fetch(requestEndpoint, {method: 'POST'})).text();
+  return (await fetch(requestEndpoint, {method: 'GET'})).text();
 }
 
 export {
