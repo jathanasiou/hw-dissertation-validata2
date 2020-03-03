@@ -11,11 +11,11 @@
     "n3": "0.11.3",
     "node-sass": "^4.13.1",
     "prop-types": "^15.7.2",
-    "query-string": "^6.11.0",
-    "react": "^16.12.0",
-    "react-bootstrap": "^1.0.0-beta.16",
+    "query-string": "^6.11.1",
+    "react": "^16.13.0",
+    "react-bootstrap": "^1.0.0-beta.17",
     "react-codemirror2": "^6.0.0",
-    "react-dom": "^16.12.0",
+    "react-dom": "^16.13.0",
     "react-scripts": "^3.4.0",
     "react-select": "^3.0.8",
     "shex": "^0.9.2"
@@ -42,7 +42,7 @@
     ]
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
+    "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-google": "^0.14.0",
@@ -50,7 +50,7 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.18.3",
-    "eslint-plugin-react-hooks": "^2.4.0",
+    "eslint-plugin-react-hooks": "^2.5.0",
     "file-loader": "^5.1.0"
   }
 }
