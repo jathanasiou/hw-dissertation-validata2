@@ -7,6 +7,7 @@ Validation of RDF documents with Bioschemas profiles. Supports:
 * User input with on-the-fly editing
 * Missing/invalid properties output
 * RDFs embedded in web page markup via http://lxbisel.macs.hw.ac.uk:8080/scraper/#api-Developers
+* A [CORS-unblocking](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?hl=en) addon might be needed for local testing.
 
 
 <hr>
