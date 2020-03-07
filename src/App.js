@@ -7,7 +7,7 @@ import ResultsPanel from './components/resultsPanel';
 import RdfShapeResults from './components/RdfShapeResults';
 import SchemaSelect from './components/schemaSelector';
 import ErrorWindow from './components/errorWindow';
-import validator from './validator';
+import ShexjsValidate from './validator';
 import { validate } from './utils/validationHelper';
 import schemasProvider from './schemas';
 import scraper from './utils/webScraper';
@@ -62,11 +62,13 @@ class App extends React.Component {
     try {
       profile = (await schemasProvider()).find((schema) => schema.name === schemaKey);
       console.log('Validating with schema:', schemaKey);
-      const codeRDF = (inputMode === 'code')
-        ? rawCode
-        : (await scraper(inputUrl));
-      validationResult = await validator(profile.content, codeRDF);
-      validationResultRDFShape = await validate(profile.content, codeRDF);
+      if (inputMode === 'code') {
+        validationResult = await ShexjsValidate(profile.content, rawCode);
+        validationResultRDFShape = await validate(profile.content, rawCode);
+      } else {
+        validationResult = await ShexjsValidate(profile.content, (await scraper(inputUrl)));
+        validationResultRDFShape = await validate(profile.content, (await scraper(inputUrl)));
+      }
     } catch (err) {
       console.error(err);
       alert('Problem with parsing the Bioschemas profile.');
