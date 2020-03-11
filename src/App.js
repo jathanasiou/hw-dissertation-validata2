@@ -3,8 +3,8 @@ import {
   Row, Col, Container, Button,
 } from 'react-bootstrap';
 import InputResource from './components/inputResource';
-import ResultsPanel from './components/resultsPanel';
-import RdfShapeResults from './components/RdfShapeResults';
+import ShexjsResultsPanel from './components/ShexjsResultsPanel';
+import RDFShapeResults from './components/RDFShapeResults';
 import SchemaSelect from './components/schemaSelector';
 import ErrorWindow from './components/errorWindow';
 import ShexjsValidate from './validator';
@@ -29,7 +29,8 @@ class App extends React.Component {
       schemaKey: null,
       validationResult: null,
       validationResultRDFShape: null,
-      validationError: null,
+      error: null,
+      errorDetails: null,
       inputMode: 'code',
       rawCode: datasetExample,
       inputUrl: 'https://www.flymine.org/flymine/begin.do',
@@ -60,6 +61,7 @@ class App extends React.Component {
     let validationResult = null;
     let validationResultRDFShape = null;
     try {
+      // throw 'kek';
       profile = (await schemasProvider()).find((schema) => schema.name === schemaKey);
       console.log('Validating with schema:', schemaKey);
       if (inputMode === 'code') {
@@ -69,18 +71,18 @@ class App extends React.Component {
         validationResult = await ShexjsValidate(profile.content, (await scraper(inputUrl)));
         validationResultRDFShape = await validate(profile.content, (await scraper(inputUrl)));
       }
-    } catch (err) {
-      console.error(err);
-      alert('Problem with parsing the Bioschemas profile.');
+    } catch (ex) {
+      console.error(ex);
+      // alert('Problem with parsing the Bioschemas profile.');
       // TODO: change to modal error window
-      // this.setState({validationError: error})
+      this.setState({ error: 'Problem with parsing the Bioschemas profile.', errorDetails: ex });
     }
     this.setState({ validationResult, validationResultRDFShape });
   };
 
   render() {
     const {
-      schemaKey, rawCode, validationResult, validationResultRDFShape, validationError,
+      schemaKey, rawCode, validationResult, validationResultRDFShape, error, errorDetails,
       inputUrl, inputMode,
     } = this.state;
     const validateBtnDisabled = (schemaKey === null) || !rawCode;
@@ -88,7 +90,7 @@ class App extends React.Component {
 
     return (
       <Container>
-        <ErrorWindow show={!!validationError} message={validationError} />
+        <ErrorWindow show={!!error} error={error} message={errorDetails} />
         <h1>Validata 2 Validator tool</h1>
         <Row>
           <Col xs="12">
@@ -107,8 +109,8 @@ class App extends React.Component {
             <SchemaSelect onChange={this.schemaSelectionChange} validateButton={validateBtn} />
             { /* TODO: add Schema Preview */ }
           </Col>
-          <Col xs={12}><ResultsPanel validationResult={validationResult} /></Col>
-          <Col xs={12}><RdfShapeResults validationResult={validationResultRDFShape} /></Col>
+          <Col xs={12}><ShexjsResultsPanel validationResult={validationResult} /></Col>
+          <Col xs={12}><RDFShapeResults validationResult={validationResultRDFShape} /></Col>
         </Row>
       </Container>
     );

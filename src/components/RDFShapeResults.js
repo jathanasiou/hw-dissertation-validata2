@@ -2,9 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Table } from 'react-bootstrap';
 import Octicon, { Report } from '@primer/octicons-react';
-import errorLineItem from './rdfShapeLineItem';
 
-const ResultsPanel = ({ validationResult }) => {
+
+const rdfShapeLineItem = (row, index) => (
+  <tr key={index}>
+    <td>{row.node}</td>
+    <td>{row.shape}</td>
+    <td>{row.status}</td>
+    <td>{row.reason}</td>
+  </tr>
+);
+
+const RDFShapeResultsPanel = ({ validationResult }) => {
   const rows = validationResult
     ? validationResult.shapeMap || []
     : [];
@@ -28,7 +37,7 @@ const ResultsPanel = ({ validationResult }) => {
             </tr>
           </thead>
           <tbody>
-            {rows.map(errorLineItem)}
+            {rows.map(rdfShapeLineItem)}
           </tbody>
         </Table>
       </Card.Body>
@@ -36,12 +45,12 @@ const ResultsPanel = ({ validationResult }) => {
   );
 };
 
-ResultsPanel.defaultProps = {
+RDFShapeResultsPanel.defaultProps = {
   validationResult: null,
 };
 
-ResultsPanel.propTypes = {
+RDFShapeResultsPanel.propTypes = {
   validationResult: PropTypes.object,
 };
 
-export default ResultsPanel;
+export default RDFShapeResultsPanel;

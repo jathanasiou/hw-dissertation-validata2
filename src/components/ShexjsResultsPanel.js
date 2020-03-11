@@ -4,7 +4,7 @@ import { Card, Table } from 'react-bootstrap';
 import Octicon, { Report } from '@primer/octicons-react';
 import errorLineItem from './errorLineItem';
 
-const ResultsPanel = ({ validationResult }) => {
+const ShexjsResultsPanel = ({ validationResult }) => {
   let title;
   let validationErrors;
 
@@ -43,12 +43,12 @@ const ResultsPanel = ({ validationResult }) => {
   );
 };
 
-ResultsPanel.defaultProps = {
+ShexjsResultsPanel.defaultProps = {
   validationResult: null,
 };
 
-ResultsPanel.propTypes = {
+ShexjsResultsPanel.propTypes = {
   validationResult: PropTypes.object,
 };
 
-export default ResultsPanel;
+export default ShexjsResultsPanel;
