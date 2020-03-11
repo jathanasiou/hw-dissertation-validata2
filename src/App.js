@@ -6,6 +6,8 @@ import InputResource from './components/inputResource';
 import ShexjsResultsPanel from './components/ShexjsResultsPanel';
 import RDFShapeResults from './components/RDFShapeResults';
 import SchemaSelect from './components/schemaSelector';
+import SchemaPreviewButton from './components/schemaPreviewButton';
+import SchemaPreviewModal from './components/schemaPreviewModal';
 import ErrorWindow from './components/errorWindow';
 import ShexjsValidate from './validator';
 import { validate } from './utils/validationHelper';
@@ -27,8 +29,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       schemaKey: null,
-      validationResult: null,
+      // validationResult: null,
       validationResultRDFShape: null,
+      showSchemaPreview: false,
       error: null,
       errorDetails: null,
       inputMode: 'code',
@@ -60,37 +63,40 @@ class App extends React.Component {
     });
   };
 
+  onSchemaPreviewHidden = () => {
+    this.setState({ showSchemaPreview: false });
+  };
+
+  onSchemaPreviewShown = () => {
+    this.setState({ showSchemaPreview: true });
+  };
+
   runValidation = async () => {
     const {
       schemaKey, rawCode, inputUrl, inputMode,
     } = this.state;
     let profile;
-    let validationResult = null;
+    // let validationResult = null;
     let validationResultRDFShape = null;
     try {
       profile = (await schemasProvider()).find((schema) => schema.name === schemaKey);
-      console.log('Validating with schema:', schemaKey);
-      if (inputMode === 'code') {
-        validationResult = await ShexjsValidate(profile.content, rawCode);
-        validationResultRDFShape = await validate(profile.content, rawCode);
-      } else {
-        validationResult = await ShexjsValidate(profile.content, (await scraper(inputUrl)));
-        validationResultRDFShape = await validate(profile.content, (await scraper(inputUrl)));
-      }
+      const rdfContent = (inputMode === 'code') ? rawCode : (await scraper(inputUrl));
+      // validationResult = await ShexjsValidate(profile.content, rawCode);
+      validationResultRDFShape = await validate(profile.content, rdfContent);
     } catch (ex) {
       console.error(ex);
       this.setState({ error: 'Problem with parsing the Bioschemas profile.', errorDetails: ex });
     }
-    this.setState({ validationResult, validationResultRDFShape });
+    this.setState({ /*validationResult,*/ validationResultRDFShape });
   };
 
   render() {
     const {
-      schemaKey, rawCode, validationResult, validationResultRDFShape, error, errorDetails,
-      inputUrl, inputMode,
+      schemaKey, rawCode, /*validationResult,*/ validationResultRDFShape, error, errorDetails,
+      inputUrl, inputMode, showSchemaPreview,
     } = this.state;
-    const validateBtnDisabled = (schemaKey === null) || !rawCode;
-    const validateBtn = (<Button onClick={this.runValidation} disabled={validateBtnDisabled} size="lg">Validate</Button>);
+    const isSchemaSelected = (schemaKey === null) || !rawCode;
+    const validateBtn = (<Button onClick={this.runValidation} disabled={isSchemaSelected} size="lg">Validate</Button>);
 
     return (
       <Container>
@@ -99,6 +105,11 @@ class App extends React.Component {
           title={error}
           message={errorDetails}
           onHide={this.onErrorHidden}
+        />
+        <SchemaPreviewModal
+          show={showSchemaPreview}
+          schemaKey={schemaKey}
+          onHide={this.onSchemaPreviewHidden}
         />
         <h1>Validata 2 Validator tool</h1>
         <Row>
@@ -114,11 +125,13 @@ class App extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col>
-            { /* TODO: add Schema Preview */ }
+          <Col xs="auto" className="pr-1">
+            <SchemaPreviewButton disabled={isSchemaSelected} onClick={this.onSchemaPreviewShown} />
+          </Col>
+          <Col className="pl-1">
             <SchemaSelect onChange={this.schemaSelectionChange} validateButton={validateBtn} />
           </Col>
-          <Col xs={12}><ShexjsResultsPanel validationResult={validationResult} /></Col>
+          {/*<Col xs={12}><ShexjsResultsPanel validationResult={validationResult} /></Col>*/}
           <Col xs={12}><RDFShapeResults validationResult={validationResultRDFShape} /></Col>
         </Row>
       </Container>

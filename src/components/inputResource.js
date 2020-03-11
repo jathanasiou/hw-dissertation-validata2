@@ -7,7 +7,6 @@ import Octicon, { Globe, Code } from '@primer/octicons-react';
 import CodeBlock from './codeBlock';
 
 class InputResource extends React.Component {
-
   onTabChange = (tabKey) => {
     this.setState({ tabKey });
     this.props.onInputModeChange(tabKey);

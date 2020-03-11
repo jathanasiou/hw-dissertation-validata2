@@ -19,8 +19,8 @@ const RDFShapeResultsPanel = ({ validationResult }) => {
     : [];
 
   return (
-    <Card>
-      <Card.Header as="h5">
+    <Card className="shadow">
+      <Card.Header as="h5" className="bg-primary text-white">
         <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Report} ariaLabel="Validation Report panel" />
         <span>RDFShape Report</span>
         {/* <span>{validationResult ? `: ${validationResult.shape}` : ''}</span> */}
