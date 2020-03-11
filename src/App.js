@@ -53,6 +53,13 @@ class App extends React.Component {
     this.setState({ schemaKey });
   };
 
+  onErrorHidden = () => {
+    this.setState({
+      error: null,
+      errorDetails: null,
+    });
+  };
+
   runValidation = async () => {
     const {
       schemaKey, rawCode, inputUrl, inputMode,
@@ -61,7 +68,6 @@ class App extends React.Component {
     let validationResult = null;
     let validationResultRDFShape = null;
     try {
-      // throw 'kek';
       profile = (await schemasProvider()).find((schema) => schema.name === schemaKey);
       console.log('Validating with schema:', schemaKey);
       if (inputMode === 'code') {
@@ -73,8 +79,6 @@ class App extends React.Component {
       }
     } catch (ex) {
       console.error(ex);
-      // alert('Problem with parsing the Bioschemas profile.');
-      // TODO: change to modal error window
       this.setState({ error: 'Problem with parsing the Bioschemas profile.', errorDetails: ex });
     }
     this.setState({ validationResult, validationResultRDFShape });
@@ -90,7 +94,12 @@ class App extends React.Component {
 
     return (
       <Container>
-        <ErrorWindow show={!!error} error={error} message={errorDetails} />
+        <ErrorWindow
+          show={!!error}
+          title={error}
+          message={errorDetails}
+          onHide={this.onErrorHidden}
+        />
         <h1>Validata 2 Validator tool</h1>
         <Row>
           <Col xs="12">
@@ -106,8 +115,8 @@ class App extends React.Component {
         </Row>
         <Row>
           <Col>
-            <SchemaSelect onChange={this.schemaSelectionChange} validateButton={validateBtn} />
             { /* TODO: add Schema Preview */ }
+            <SchemaSelect onChange={this.schemaSelectionChange} validateButton={validateBtn} />
           </Col>
           <Col xs={12}><ShexjsResultsPanel validationResult={validationResult} /></Col>
           <Col xs={12}><RDFShapeResults validationResult={validationResultRDFShape} /></Col>
