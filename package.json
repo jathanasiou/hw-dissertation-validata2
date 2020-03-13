@@ -2,6 +2,7 @@
   "name": "validata2",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://www.macs.hw.ac.uk/SWeL/BioschemasValidator/",
   "dependencies": {
     "@primer/octicons-react": "^9.5.0",
     "bootstrap": "^4.4.1",
