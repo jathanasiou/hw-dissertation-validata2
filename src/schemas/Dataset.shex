@@ -1,38 +1,60 @@
-PREFIX schema: <http://schema.org/> 
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
-    <URL>
-      xsd:string OR IRI
+# Validation shapes for Dataset resources
+# Enforces Dataset Specification version 0.3-DRAFT
+# http://bioschemas.org/devSpecs/Dataset
 
+PREFIX schema: <http://schema.org/>
+PREFIX bs: <http://bioschemas.org/>
 
-start = @<DatasetMinimum>
-   
-<DatasetMinimum> {
-  rdf:type [schema:Dataset] ;
-  schema:description xsd:string  ;
-  schema:identifier xsd:string OR @<URL> OR {a [schema:PropertyValue]} OR IRI + ;
-  schema:keywords xsd:string + ;
-  schema:name xsd:string  ;
-  schema:url @<URL>  ;
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+<DatasetMinimum>{
+  $bs:minimum (
+    rdf:type [schema:Dataset] ;
+    schema:description schema:Text OR xsd:string ;
+    schema:identifier @<PropertyValueShape> OR schema:Text OR xsd:string OR schema:URL OR IRI + ;
+    schema:keywords schema:Text OR xsd:string + ;
+    schema:name schema:Text OR xsd:string ;
+    schema:url schema:URL OR IRI ;
+  ) ;
 }
 
 <DatasetRecommended> {
-  rdf:type [schema:Dataset] ;
-  schema:citation xsd:string OR {a [schema:CreativeWork]} OR IRI * ;
-  schema:creator  @<OrganizationOrPerson> OR IRI * ;
-  schema:distribution  {a [schema:DataDownload]} OR IRI ? ;
-  schema:includedInDataCatalog  {a [schema:DataCatalog]} OR IRI * ;
-  schema:license @<URL> OR {a [schema:CreativeWork]} OR IRI ? ;
-  schema:measurementTechnique xsd:string OR @<URL> * ;
-  schema:variableMeasured xsd:string OR {a [schema:PropertyValue]} OR IRI * ;
-  schema:version xsd:double OR xsd:string ? ;
+  $bs:recommended (
+    &bs:minimum ;
+    schema:citation @<PublicationShape> OR schema:Text OR xsd:string + ;
+    schema:creator @<PersonOrOrganizationShape> + ;
+    schema:distribution @<DataDownloadShape> ;
+    schema:includedInDataCatalog @<DataCatalogShape> + ;
+    schema:license @<LicenseShape> OR schema:URL OR IRI ;
+    schema:measurementTechnique schema:Text OR xsd:string OR schema:URL OR IRI + ;
+    schema:variableMeasured @<PropertyValueShape> OR schema:Text OR xsd:string + ;
+    schema:version schema:Number OR xsd:int OR xsd:decimal OR schema:Text OR xsd:string ;
+  ) ;
 }
 
-<DatasetOptional> {
-  rdf:type [schema:Dataset] ;
+<PublicationShape> {
+  rdf:type [schema:CreativeWork schema:ScholarlyArticle];
 }
 
-<OrganizationOrPerson>{
-  rdf:type [ schema:Organization schema:Person]
+<PersonOrOrganizationShape> {
+  rdf:type [schema:Organization schema:Person] ;
+  schema:name schema:Text OR xsd:string ;
+}
+
+<DataDownloadShape> {
+  rdf:type [schema:DataDownload] ;
+}
+
+<DataCatalogShape> {
+  rdf:type [schema:DataCatalog] ;
+}
+
+<LicenseShape> {
+  rdf:type [schema:CreativeWork] ;
+}
+
+<PropertyValueShape> {
+  rdf:type [schema:PropertyValue] ;
 }
