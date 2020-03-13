@@ -1,17 +1,30 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Table } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import Octicon, { Report } from '@primer/octicons-react';
+import BootstrapTable from 'react-bootstrap-table-next';
 
 
-const rdfShapeLineItem = (row, index) => (
-  <tr key={index}>
-    <td>{row.node}</td>
-    <td>{row.shape}</td>
-    <td>{row.status}</td>
-    <td>{row.reason}</td>
-  </tr>
-);
+const rowDecorator = (row) => ((row.status === 'conformant') ? 'good' : 'bad');
+
+const columns = [{
+  dataField: 'node',
+  text: 'Node',
+}, {
+  dataField: 'shape',
+  text: 'Shape',
+}, {
+  dataField: 'status',
+  text: 'Status',
+}];
+
+const expandRow = {
+  renderer: (row) => (
+    <Fragment>{row.reason}</Fragment>
+  ),
+  showExpandColumn: true,
+};
+
 
 const RDFShapeResultsPanel = ({ validationResult }) => {
   const rows = validationResult
@@ -23,23 +36,18 @@ const RDFShapeResultsPanel = ({ validationResult }) => {
       <Card.Header as="h5" className="bg-primary text-white">
         <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Report} ariaLabel="Validation Report panel" />
         <span>RDFShape Report</span>
-        {/* <span>{validationResult ? `: ${validationResult.shape}` : ''}</span> */}
       </Card.Header>
       <Card.Body>
-        <Card.Title>title</Card.Title>
-        <Table bordered hover>
-          <thead>
-            <tr>
-              <th>Node</th>
-              <th>Shape</th>
-              <th>Status</th>
-              <th>Reason</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(rdfShapeLineItem)}
-          </tbody>
-        </Table>
+        <Card.Title>Validation status for each Node-Shape pair</Card.Title>
+        <BootstrapTable
+          bootstrap4
+          bordered={false}
+          keyField="node" // field to use as key
+          data={rows}
+          columns={columns}
+          expandRow={expandRow}
+          rowClasses={rowDecorator}
+        />
       </Card.Body>
     </Card>
   );

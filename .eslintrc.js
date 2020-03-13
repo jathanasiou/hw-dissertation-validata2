@@ -23,6 +23,7 @@ module.exports = {
     'babel'
   ],
   rules: {
+    "react/jsx-fragments": [0, "element"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "babel/semi": 1,
     "jsx-a11y/label-has-associated-control": [ 2, {

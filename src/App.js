@@ -2,15 +2,14 @@ import React from 'react';
 import {
   Row, Col, Container, Button,
 } from 'react-bootstrap';
+import Octicon, { ArrowBoth } from '@primer/octicons-react';
 import InputResource from './components/inputResource';
-import ShexjsResultsPanel from './components/ShexjsResultsPanel';
 import RDFShapeResults from './components/RDFShapeResults';
-import SchemaSelect from './components/schemaSelector';
+import Selector from './components/Selector';
 import SchemaPreviewButton from './components/schemaPreviewButton';
 import SchemaPreviewModal from './components/schemaPreviewModal';
 import ErrorWindow from './components/errorWindow';
-import ShexjsValidate from './validator';
-import { validate } from './utils/validationHelper';
+import { parseTurtle, validate } from './utils/validationHelper';
 import schemasProvider from './schemas';
 import scraper from './utils/webScraper';
 
@@ -20,24 +19,40 @@ const datasetExample = `\
   <http://schema.org/description> "The GeneChip® Drosophila Genome Array is a microarray tool for studying expression of Drosophila melanogaster transcripts.";
   <http://schema.org/identifier> "http://www.affymetrix.com/products/arrays/specific/fly.affx";
   <http://schema.org/name> "Affymetrix array: GeneChip Drosophila Genome 2.0 Array";
+  <http://schema.org/keywords> "buzzword";
   <http://schema.org/url> <https://www.flymine.org/flymine/dataset> .
 `;
+
+const SHAPE_TYPES = ['Minimum', 'Recommended', 'Optional'];
 
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      schemaKey: null,
-      // validationResult: null,
+      shapes: [],
+      shapeSelection: null,
+      schemas: [],
+      schemaSelection: null, // schema selection
+      rdfNodes: [],
+      rdfNodeSelection: null,
       validationResultRDFShape: null,
       showSchemaPreview: false,
-      error: null,
-      errorDetails: null,
       inputMode: 'code',
       rawCode: datasetExample,
       inputUrl: 'https://www.flymine.org/flymine/begin.do',
+      error: null,
+      errorDetails: null,
     };
+  }
+
+  componentDidMount() {
+    parseTurtle(datasetExample).then((nodes) => {
+      this.setState({ rdfNodes: nodes });
+    });
+    schemasProvider().then((schemas) => {
+      this.setState({ schemas });
+    });
   }
 
   inputModeChange = (inputMode) => {
@@ -45,15 +60,42 @@ class App extends React.Component {
   };
 
   codeChange = (code) => {
-    this.setState({ rawCode: code });
+    this.setState({
+      rawCode: code,
+      rdfNodeSelection: null,
+    });
+    parseTurtle(code)
+      .then((nodes) => {
+        this.setState({ rdfNodes: nodes });
+      })
+      .catch((err) => {
+        // console.error(err); // error because of invalid code
+        this.setState({ rdfNodes: [] });
+      });
   };
 
   inputUrlChange = (newUrl) => {
     this.setState({ inputUrl: newUrl });
   };
 
-  schemaSelectionChange = (schemaKey) => {
-    this.setState({ schemaKey });
+  schemaSelectionChange = (schemaSelection) => {
+    this.setState({
+      schemaSelection: (schemaSelection)
+        ? schemaSelection.value
+        : null,
+      shapes: (schemaSelection)
+        ? SHAPE_TYPES.map((type) => `${schemaSelection.value}${type}`)
+        : [],
+      shapeSelection: null,
+    });
+  };
+
+  nodeSelectionChange = (rdfNodeSelection) => {
+    this.setState({ rdfNodeSelection });
+  };
+
+  shapeSelectionChange = (shapeSelection) => {
+    this.setState({ shapeSelection });
   };
 
   onErrorHidden = () => {
@@ -73,30 +115,46 @@ class App extends React.Component {
 
   runValidation = async () => {
     const {
-      schemaKey, rawCode, inputUrl, inputMode,
+      schemas, schemaSelection, rawCode, inputUrl, inputMode, rdfNodeSelection, shapeSelection,
     } = this.state;
-    let profile;
-    // let validationResult = null;
     let validationResultRDFShape = null;
     try {
-      profile = (await schemasProvider()).find((schema) => schema.name === schemaKey);
+      // TODO: crawl web resource before validation
       const rdfContent = (inputMode === 'code') ? rawCode : (await scraper(inputUrl));
-      // validationResult = await ShexjsValidate(profile.content, rawCode);
-      validationResultRDFShape = await validate(profile.content, rdfContent);
+      const profile = (schemas).find((schema) => schema.name === schemaSelection);
+      validationResultRDFShape = await validate({
+        schema: profile.content,
+        rdf: rdfContent,
+        node: `<${rdfNodeSelection.value}>`,
+        shape: `<${shapeSelection.value}>`,
+      });
     } catch (ex) {
       console.error(ex);
       this.setState({ error: 'Problem with parsing the Bioschemas profile.', errorDetails: ex });
+      return;
     }
-    this.setState({ /*validationResult,*/ validationResultRDFShape });
+    this.setState({ validationResultRDFShape });
   };
 
   render() {
     const {
-      schemaKey, rawCode, /*validationResult,*/ validationResultRDFShape, error, errorDetails,
+      rawCode, validationResultRDFShape, error, errorDetails,
       inputUrl, inputMode, showSchemaPreview,
+      schemas, schemaSelection,
+      shapes, shapeSelection,
+      rdfNodes, rdfNodeSelection,
     } = this.state;
-    const isSchemaSelected = (schemaKey === null) || !rawCode;
-    const validateBtn = (<Button onClick={this.runValidation} disabled={isSchemaSelected} size="lg">Validate</Button>);
+    const isSchemaSelected = (schemaSelection !== null);
+    const isShapeSelected = (shapeSelection !== null);
+    const isNodeSelected = (rdfNodeSelection !== null);
+
+    const validateBtnEnabled = (isSchemaSelected && isNodeSelected && isShapeSelected);
+
+    const schemasOptions = schemas.map((schema) => ({ label: schema.name, value: schema.name }));
+    const shapesOptions = shapes.map((shape) => ({ label: shape, value: shape }));
+    const nodesOptions = rdfNodes.map((node) => ({ label: node, value: node }));
+
+    const validateBtn = (<Button onClick={this.runValidation} disabled={!validateBtnEnabled} size="lg">Validate</Button>);
 
     return (
       <Container>
@@ -108,7 +166,7 @@ class App extends React.Component {
         />
         <SchemaPreviewModal
           show={showSchemaPreview}
-          schemaKey={schemaKey}
+          schemaKey={schemaSelection}
           onHide={this.onSchemaPreviewHidden}
         />
         <h1>Validata 2 Validator tool</h1>
@@ -126,13 +184,24 @@ class App extends React.Component {
         </Row>
         <Row>
           <Col xs="auto" className="pr-1">
-            <SchemaPreviewButton disabled={isSchemaSelected} onClick={this.onSchemaPreviewShown} />
+            <SchemaPreviewButton disabled={!isSchemaSelected} onClick={this.onSchemaPreviewShown} />
           </Col>
           <Col className="pl-1">
-            <SchemaSelect onChange={this.schemaSelectionChange} validateButton={validateBtn} />
+            <Selector options={schemasOptions} onChange={this.schemaSelectionChange} placeholder="Select a Profile" />
           </Col>
-          {/*<Col xs={12}><ShexjsResultsPanel validationResult={validationResult} /></Col>*/}
-          <Col xs={12}><RDFShapeResults validationResult={validationResultRDFShape} /></Col>
+        </Row>
+        <Row>
+          <Col>
+            <Selector options={nodesOptions} onChange={this.nodeSelectionChange} placeholder="Select a Node to validate" value={rdfNodeSelection} />
+          </Col>
+          <Col xs="auto" className="px-0"><Octicon size="medium" verticalAlign="top" icon={ArrowBoth} /></Col>
+          <Col>
+            <Selector disabled={!isSchemaSelected} options={shapesOptions} onChange={this.shapeSelectionChange} placeholder="Select a Profile Shape to validate against" value={shapeSelection} />
+          </Col>
+          <Col xs="auto">{validateBtn}</Col>
+        </Row>
+        <Row>
+          <Col><RDFShapeResults validationResult={validationResultRDFShape} /></Col>
         </Row>
       </Container>
     );

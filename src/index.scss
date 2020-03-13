@@ -37,3 +37,23 @@ button[disabled]{
 	width: 30px;
 	height: 30px;
 }
+
+div.scrollable {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+tr {
+  &.clickable {
+    cursor: pointer;
+  }
+  &.good td {
+    background-color: lightgreen;
+  }
+  &.bad td {
+    @extend .bg-danger;
+  }
+}

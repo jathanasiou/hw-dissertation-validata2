@@ -1,16 +1,33 @@
-import qs from 'query-string';
+// import qs from 'query-string';
+import { Parser } from 'n3';
+
+const parser = new Parser({ format: 'Turtle' });
 
 
 const API = 'http://rdfshape.weso.es:8080/api';
 
 async function getFormats() {
-  const requestEndpoint = qs.stringifyUrl({
-    url: `${API}/data/formats`,
-  });
-  return (await fetch(requestEndpoint)).json();
+  return (await fetch(`${API}/data/formats`)).json();
 }
 
-async function validate(schema, rdf) {
+function parseTurtle(rdf) {
+  return new Promise((resolve, reject) => {
+    const subjects = new Set();
+    parser.parse(rdf, (error, quad, prefixes) => {
+      if (error) reject(error);
+      if (quad) {
+        subjects.add(quad.subject.id);
+      } else {
+        resolve(Array.from(subjects));
+      }
+    });
+  });
+}
+
+async function validate({
+  schema, rdf, shape, node,
+}) {
+  console.log(...arguments)
   const formData = new FormData();
   // formData.append('activeTab', '#dataTextArea');
   // formData.append('dataFormatTextArea', 'TURTLE');
@@ -24,7 +41,7 @@ async function validate(schema, rdf) {
   formData.append('schemaFormat', 'ShExC');
   formData.append('schema', schema);
   formData.append('shapeMapFormat', 'ShExC');
-  formData.append('shapeMap', '<genid-c7a50d6e828f4595a195f9c67304f6d2-0AE87CB066C8D9CD43117E0C5A3090F0>@<DatasetMinimum>');
+  formData.append('shapeMap', `${node}@${shape}`);
   formData.append('schemaEngine', 'ShEx');
   formData.append('triggerMode', 'shapeMap');
 
@@ -33,5 +50,6 @@ async function validate(schema, rdf) {
 
 export {
   getFormats,
+  parseTurtle,
   validate,
 };

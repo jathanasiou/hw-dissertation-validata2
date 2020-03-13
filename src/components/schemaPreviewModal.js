@@ -20,7 +20,6 @@ class SchemaPreviewModal extends React.Component {
   }
 
   async componentDidUpdate(prevProps) {
-    console.log(...arguments)
     const { schemaKey } = this.props;
     if (schemaKey !== prevProps.schemaKey) { // to avoid infinite recursion
       const schema = (await schemasProvider()).find((s) => s.name === schemaKey);
