@@ -1,91 +1,96 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Tabs, Tab, InputGroup, FormControl,
+  Button, InputGroup, FormControl, Row, Col,
 } from 'react-bootstrap';
-import Octicon, { Globe, Code } from '@primer/octicons-react';
+import Octicon, { Globe } from '@primer/octicons-react';
+import scraper from '../utils/webScraper';
 import CodeBlock from './codeBlock';
 
-class InputResource extends React.Component {
-  onTabChange = (tabKey) => {
-    this.setState({ tabKey });
-    this.props.onInputModeChange(tabKey);
+
+class InputResource extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputUrl: 'https://www.flymine.org/flymine/begin.do',
+      loading: false,
+      onCodeChange: props.onCodeChange,
+    };
+  }
+
+  onUrlChange = (inputUrl) => {
+    this.setState({ inputUrl });
   };
 
-  urlChange = (event) => {
-    this.props.onInputUrlChange(event.target.value);
+  onCodeEdit = (code, data) => {
+    const { onCodeChange, loading } = this.state;
+    console.log('onCodeEdit')
+    if (loading)  {
+      data.cancel();
+      return;
+    }
+    onCodeChange(code);
+  };
+
+  onLoad = async () => {
+    const { onCodeChange, inputUrl } = this.state;
+    this.setState({ loading: true });
+
+    const rdfCode = await scraper(inputUrl);
+    this.setState({ loading: false }, () => onCodeChange(rdfCode));
   };
 
   render() {
-    const {
-      onCodeChange, rawCode, inputUrl, inputMode,
-    } = this.props;
+    const { inputUrl, loading } = this.state;
+    const { rdfCode } = this.props;
 
     const urlInputControl = (
-      <Fragment>
-        <div className="alert alert-warning mt-1 font-italic">Work in progress</div>
-        <label htmlFor="basic-url">Type a URL below to retrieve embedded JSON-LD from</label>
-        <InputGroup>
-          <InputGroup.Prepend>
-            <InputGroup.Text id="basic-url-addon">
-              <Octicon icon={Globe} ariaLabel="Web address input" />
-            </InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
-            id="basic-url"
-            placeholder="https://myurl.com/RDF_entry"
-            aria-describedby="basic-url-addon"
-            onChange={this.urlChange}
-            value={inputUrl}
-          />
-        </InputGroup>
-      </Fragment>
+      <Row>
+        <Col xs="auto" className="pr-0">
+          <Button type="primary" onClick={this.onLoad}>Load</Button>
+        </Col>
+        <Col>
+          {/* <label htmlFor="basic-url">Type a URL below to retrieve embedded RDF</label> */}
+          <InputGroup>
+            <InputGroup.Prepend>
+              <InputGroup.Text id="basic-url-addon">
+                <Octicon icon={Globe} ariaLabel="Web address input" />
+              </InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              id="basic-url"
+              placeholder="https://myurl.com/RDF_document"
+              aria-describedby="basic-url-addon"
+              value={inputUrl}
+              onChange={this.onUrlChange}
+            />
+          </InputGroup>
+        </Col>
+      </Row>
     );
     const codeInputControl = (
-      <CodeBlock value={rawCode} onChange={onCodeChange} className="border border-secondary" />
-    );
-    const pageInputTabTitle = (
-      <span>
-        <Octicon className="inline-icon size20" verticalAlign="middle" icon={Globe} ariaLabel="web page input" />
-        <span>Web page</span>
-      </span>
-    );
-
-    const rawInputTabTitle = (
-      <span>
-        <Octicon className="inline-icon size20" verticalAlign="middle" icon={Code} ariaLabel="Code input" />
-        <span>Turtle code</span>
-      </span>
+      <CodeBlock
+        className="border border-secondary"
+        value={rdfCode}
+        onChange={this.onCodeEdit}
+        readonly={loading}
+      />
     );
 
     return (
       <div className="border-bottom pb-2">
-        <h3>RDF data source</h3>
-        <Tabs id="controlled-input-tab" activeKey={inputMode} onSelect={(k) => this.onTabChange(k)}>
-          <Tab eventKey="url" title={pageInputTabTitle}>
-            {urlInputControl}
-          </Tab>
-          <Tab eventKey="code" title={rawInputTabTitle}>
-            {codeInputControl}
-          </Tab>
-        </Tabs>
+        {`LOADING: ${loading}`}
+        <div className="h3">Load from a web resource and/or directly edit the code below</div>
+        {urlInputControl}
+        {codeInputControl}
       </div>
     );
   }
 }
 
-InputResource.defaultProps = {
-  rawCode: '',
-  inputUrl: '',
-};
-
 InputResource.propTypes = {
-  onInputModeChange: PropTypes.func.isRequired,
-  inputMode: PropTypes.string.isRequired, // one of 'code', 'url'
-  rawCode: PropTypes.string,
   onCodeChange: PropTypes.func.isRequired,
-  inputUrl: PropTypes.string,
-  onInputUrlChange: PropTypes.func.isRequired,
+  rdfCode: PropTypes.string.isRequired,
 };
 
 export default InputResource;

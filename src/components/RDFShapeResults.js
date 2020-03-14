@@ -26,32 +26,35 @@ const expandRow = {
 };
 
 
-const RDFShapeResultsPanel = ({ validationResult }) => {
-  const rows = validationResult
-    ? validationResult.shapeMap || []
-    : [];
+class RDFShapeResultsPanel extends React.PureComponent {
+  render() {
+    const { validationResult } = this.props;
+    const rows = validationResult
+      ? validationResult.shapeMap || []
+      : [];
 
-  return (
-    <Card className="shadow">
-      <Card.Header as="h5" className="bg-primary text-white">
-        <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Report} ariaLabel="Validation Report panel" />
-        <span>RDFShape Report</span>
-      </Card.Header>
-      <Card.Body>
-        <Card.Title>Validation status for each Node-Shape pair</Card.Title>
-        <BootstrapTable
-          bootstrap4
-          bordered={false}
-          keyField="node" // field to use as key
-          data={rows}
-          columns={columns}
-          expandRow={expandRow}
-          rowClasses={rowDecorator}
-        />
-      </Card.Body>
-    </Card>
-  );
-};
+    return (
+      <Card className="shadow">
+        <Card.Header as="h5" className="bg-primary text-white">
+          <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Report} ariaLabel="Validation Report panel" />
+          <span>RDFShape Report</span>
+        </Card.Header>
+        <Card.Body>
+          <Card.Title>Validation status for each Node-Shape pair</Card.Title>
+          <BootstrapTable
+            bootstrap4
+            bordered={false}
+            keyField="node" // field to use as key
+            data={rows}
+            columns={columns}
+            expandRow={expandRow}
+            rowClasses={rowDecorator}
+          />
+        </Card.Body>
+      </Card>
+    );
+  }
+}
 
 RDFShapeResultsPanel.defaultProps = {
   validationResult: null,

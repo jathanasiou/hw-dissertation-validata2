@@ -6,7 +6,7 @@ require('codemirror/mode/javascript/javascript');
 
 
 const CodeBlock = ({
-  value, className, lineNumbers, onChange,
+  value, className, lineNumbers, onChange, readonly,
 }) => (
   <CodeMirror
     value={value}
@@ -14,9 +14,13 @@ const CodeBlock = ({
     options={{
       mode: 'javascript',
       theme: 'eclipse',
+      readonly,
       lineNumbers,
     }}
-    onBeforeChange={(editor, data, value) => onChange(value)}
+    onBeforeChange={(editor, data, value) => {
+      console.log('onBeforeChange',data.cancel);
+      onChange(value, data);
+    }}
   />
 );
 
@@ -24,6 +28,7 @@ CodeBlock.defaultProps = {
   lineNumbers: true,
   value: '',
   className: '',
+  readonly: false,
 };
 
 CodeBlock.propTypes = {
@@ -31,6 +36,7 @@ CodeBlock.propTypes = {
   lineNumbers: PropTypes.bool,
   value: PropTypes.string,
   className: PropTypes.string,
+  readonly: PropTypes.bool,
 };
 
 export default CodeBlock;

@@ -4,7 +4,7 @@ import Select from 'react-select';
 
 
 const Selector = ({
-  options, onChange, placeholder, value, disabled
+  options, onChange, placeholder, value, disabled,
 }) => (
   <Select
     className="h-100"
@@ -19,12 +19,16 @@ const Selector = ({
 
 Selector.defaultProps = {
   placeholder: '',
+  disabled: false,
+  value: null,
 };
 
 Selector.propTypes = {
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
+  disabled: PropTypes.bool,
+  value: PropTypes.object,
 };
 
 

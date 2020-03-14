@@ -39,8 +39,8 @@ class App extends React.Component {
       validationResultRDFShape: null,
       showSchemaPreview: false,
       inputMode: 'code',
-      rawCode: datasetExample,
-      inputUrl: 'https://www.flymine.org/flymine/begin.do',
+      rdfCode: datasetExample,
+      // inputUrl: 'https://www.flymine.org/flymine/begin.do',
       error: null,
       errorDetails: null,
     };
@@ -61,7 +61,7 @@ class App extends React.Component {
 
   codeChange = (code) => {
     this.setState({
-      rawCode: code,
+      rdfCode: code,
       rdfNodeSelection: null,
     });
     parseTurtle(code)
@@ -115,12 +115,12 @@ class App extends React.Component {
 
   runValidation = async () => {
     const {
-      schemas, schemaSelection, rawCode, inputUrl, inputMode, rdfNodeSelection, shapeSelection,
+      schemas, schemaSelection, rdfCode, inputUrl, inputMode, rdfNodeSelection, shapeSelection,
     } = this.state;
     let validationResultRDFShape = null;
     try {
       // TODO: crawl web resource before validation
-      const rdfContent = (inputMode === 'code') ? rawCode : (await scraper(inputUrl));
+      const rdfContent = (inputMode === 'code') ? rdfCode : (await scraper(inputUrl));
       const profile = (schemas).find((schema) => schema.name === schemaSelection);
       validationResultRDFShape = await validate({
         schema: profile.content,
@@ -138,8 +138,7 @@ class App extends React.Component {
 
   render() {
     const {
-      rawCode, validationResultRDFShape, error, errorDetails,
-      inputUrl, inputMode, showSchemaPreview,
+      rdfCode, validationResultRDFShape, error, errorDetails, showSchemaPreview,
       schemas, schemaSelection,
       shapes, shapeSelection,
       rdfNodes, rdfNodeSelection,
@@ -169,17 +168,10 @@ class App extends React.Component {
           schemaKey={schemaSelection}
           onHide={this.onSchemaPreviewHidden}
         />
-        <h1>Validata 2 Validator tool</h1>
+        <h1>Validata2 Validator tool</h1>
         <Row>
           <Col xs="12">
-            <InputResource
-              inputMode={inputMode}
-              onInputModeChange={this.inputModeChange}
-              rawCode={rawCode}
-              onCodeChange={this.codeChange}
-              inputUrl={inputUrl}
-              onInputUrlChange={this.inputUrlChange}
-            />
+            <InputResource rdfCode={rdfCode} onCodeChange={this.codeChange} />
           </Col>
         </Row>
         <Row>
@@ -187,7 +179,7 @@ class App extends React.Component {
             <SchemaPreviewButton disabled={!isSchemaSelected} onClick={this.onSchemaPreviewShown} />
           </Col>
           <Col className="pl-1">
-            <Selector options={schemasOptions} onChange={this.schemaSelectionChange} placeholder="Select a Profile" />
+            <Selector options={schemasOptions} onChange={this.schemaSelectionChange} placeholder="Select a Profile" value={schemaSelection} />
           </Col>
         </Row>
         <Row>
