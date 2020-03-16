@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Button, InputGroup, FormControl, Row, Col,
+  Card,
 } from 'react-bootstrap';
-import Octicon, { Globe } from '@primer/octicons-react';
+import Octicon, { Globe, Code } from '@primer/octicons-react';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import scraper from '../utils/webScraper';
@@ -85,11 +86,17 @@ class InputResource extends React.PureComponent {
     );
 
     return (
-      <div className="border-bottom pb-2">
-        <div className="h3">Load from a web resource and/or directly edit the code below</div>
-        {urlInputControl}
-        {codeInputControl}
-      </div>
+      <Card className="shadow">
+        <Card.Header as="h5" className="bg-primary text-white">
+          <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Code} ariaLabel="Structured data panel" />
+          <span>Structured Data</span>
+        </Card.Header>
+        <Card.Body>
+          <Card.Title>Load from a web resource and/or directly edit the code below</Card.Title>
+          {urlInputControl}
+          {codeInputControl}
+        </Card.Body>
+      </Card>
     );
   }
 }

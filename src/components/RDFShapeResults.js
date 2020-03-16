@@ -37,7 +37,7 @@ class RDFShapeResultsPanel extends React.PureComponent {
       <Card className="shadow">
         <Card.Header as="h5" className="bg-primary text-white">
           <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Report} ariaLabel="Validation Report panel" />
-          <span>RDFShape Report</span>
+          <span>Validation  Report</span>
         </Card.Header>
         <Card.Body>
           <Card.Title>Validation status for each Node-Shape pair</Card.Title>

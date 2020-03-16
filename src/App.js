@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  Row, Col, Container, Button,
+  Row, Col, Container, Button, Card,
 } from 'react-bootstrap';
-import Octicon, { ArrowBoth } from '@primer/octicons-react';
+import Octicon, { Beaker, ArrowBoth } from '@primer/octicons-react';
 import InputResource from './components/inputResource';
 import RDFShapeResults from './components/RDFShapeResults';
 import Selector from './components/Selector';
@@ -172,22 +172,36 @@ class App extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col xs="auto" className="pr-1">
-            <SchemaPreviewButton disabled={!isSchemaSelected} onClick={this.onSchemaPreviewShown} />
+          <Col xs="12">
+            <Card className="shadow">
+              <Card.Header as="h5" className="bg-primary text-white">
+                <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Beaker} ariaLabel="Structured data panel" />
+                <span>Bioschemas Profile</span>
+              </Card.Header>
+              <Card.Body>
+                <Card.Title>Select validation parameters</Card.Title>
+                <Row>
+                  <Col className="pr-1">
+                    <Selector options={schemasOptions} onChange={this.schemaSelectionChange} placeholder="Select a Profile" value={schemaSelection} />
+                  </Col>
+                  <Col xs="auto" className="pl-1">
+                    <SchemaPreviewButton disabled={!isSchemaSelected} onClick={this.onSchemaPreviewShown} />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Selector options={nodesOptions} onChange={this.nodeSelectionChange} placeholder="Select a Node to validate" value={rdfNodeSelection} />
+                  </Col>
+                  <Col xs="auto" className="px-0"><Octicon size="medium" verticalAlign="top" icon={ArrowBoth} /></Col>
+                  <Col>
+                    <Selector disabled={!isSchemaSelected} options={shapesOptions} onChange={this.shapeSelectionChange} placeholder="Select a Profile Shape to validate against" value={shapeSelection} />
+                  </Col>
+                  <Col xs="auto">{validateBtn}</Col>
+                </Row>
+
+              </Card.Body>
+            </Card>
           </Col>
-          <Col className="pl-1">
-            <Selector options={schemasOptions} onChange={this.schemaSelectionChange} placeholder="Select a Profile" value={schemaSelection} />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Selector options={nodesOptions} onChange={this.nodeSelectionChange} placeholder="Select a Node to validate" value={rdfNodeSelection} />
-          </Col>
-          <Col xs="auto" className="px-0"><Octicon size="medium" verticalAlign="top" icon={ArrowBoth} /></Col>
-          <Col>
-            <Selector disabled={!isSchemaSelected} options={shapesOptions} onChange={this.shapeSelectionChange} placeholder="Select a Profile Shape to validate against" value={shapeSelection} />
-          </Col>
-          <Col xs="auto">{validateBtn}</Col>
         </Row>
         <Row>
           <Col><RDFShapeResults validationResult={validationResultRDFShape} /></Col>
