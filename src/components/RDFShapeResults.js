@@ -5,7 +5,7 @@ import Octicon, { Report } from '@primer/octicons-react';
 import BootstrapTable from 'react-bootstrap-table-next';
 
 
-const rowDecorator = (row) => ((row.status === 'conformant') ? 'good' : 'bad');
+const rowDecorator = (row) => ((row.status === 'conformant') ? 'good clickable' : 'bad clickable');
 
 const columns = [{
   dataField: 'node',

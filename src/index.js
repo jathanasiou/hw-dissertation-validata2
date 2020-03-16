@@ -5,9 +5,6 @@ import App from './App';
 import './index.scss';
 import 'bootstrap/scss/bootstrap.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
-import 'codemirror/theme/eclipse.css';
 
 import * as serviceWorker from './serviceWorker';
 

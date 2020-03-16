@@ -49,11 +49,19 @@ div.scrollable {
 tr {
   &.clickable {
     cursor: pointer;
+    &:hover {
+
+    }
   }
-  &.good td {
+  &.good {
     background-color: lightgreen;
   }
-  &.bad td {
+  &.bad {
     @extend .bg-danger;
   }
+}
+
+td.reset-expansion-style {
+  @extend .border;
+  @extend .border-secondary;
 }

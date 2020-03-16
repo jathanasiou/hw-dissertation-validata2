@@ -118,7 +118,7 @@ class App extends React.Component {
     try {
       // TODO: crawl web resource before validation
       const rdfContent = (inputMode === 'code') ? rdfCode : (await scraper(inputUrl));
-      const profile = (schemas).find((schema) => schema.name === schemaSelection);
+      const profile = (schemas).find((schema) => schema.name === schemaSelection.value);
       validationResultRDFShape = await validate({
         schema: profile.content,
         rdf: rdfContent,
