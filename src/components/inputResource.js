@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, InputGroup, FormControl, Row, Col,
+  Button, InputGroup, FormControl, Row, Col, Spinner,
 } from 'react-bootstrap';
 import Octicon, { Globe, Code } from '@primer/octicons-react';
 import Editor from 'react-simple-code-editor';
@@ -46,14 +46,14 @@ class InputResource extends React.PureComponent {
   };
 
   render() {
-    const { inputUrl } = this.state;
+    const { inputUrl, loading } = this.state;
     const { rdfCode } = this.props;
+    const spinnerClass = 'pl-0' + (loading ? '' : ' invisible');
+    const editorClass = 'border border-secondary' +
+      (loading ? ' disabled-code' : '');
 
     const urlInputControl = (
       <Row>
-        <Col xs="auto" className="pr-0">
-          <Button type="primary" onClick={this.onLoad}>Load</Button>
-        </Col>
         <Col>
           <InputGroup>
             <InputGroup.Prepend>
@@ -70,11 +70,17 @@ class InputResource extends React.PureComponent {
             />
           </InputGroup>
         </Col>
+        <Col xs="auto">
+          <Button type="primary" onClick={this.onLoad}>Load</Button>
+        </Col>
+        <Col xs="auto" className={spinnerClass}>
+          <Spinner animation="border" variant="primary" />
+        </Col>
       </Row>
     );
     const codeInputControl = (
       <Editor
-        className="border border-secondary"
+        className={editorClass}
         value={rdfCode}
         padding={10}
         onValueChange={this.onCodeEdit}

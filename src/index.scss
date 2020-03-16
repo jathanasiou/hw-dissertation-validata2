@@ -19,6 +19,13 @@ button[disabled]{
 	cursor: not-allowed;
 }
 
+.disabled-code {
+  & textarea {
+    background-color: lightgray !important;
+    cursor: not-allowed !important;
+  }
+}
+
 // bottom margin for all rows
 .row {
 	@extend .mb-2;
