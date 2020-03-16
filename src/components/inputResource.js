@@ -4,8 +4,11 @@ import {
   Button, InputGroup, FormControl, Row, Col,
 } from 'react-bootstrap';
 import Octicon, { Globe } from '@primer/octicons-react';
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
 import scraper from '../utils/webScraper';
-import CodeBlock from './codeBlock';
+import 'prismjs/components/prism-turtle';
+import 'prismjs/themes/prism-coy.css';
 
 
 class InputResource extends React.PureComponent {
@@ -22,22 +25,23 @@ class InputResource extends React.PureComponent {
     this.setState({ inputUrl });
   };
 
-  onCodeEdit = (code, data) => {
+  onCodeEdit = (newCode) => {
     const { onCodeChange, loading } = this.state;
-    console.log('onCodeEdit')
-    if (loading)  {
-      data.cancel();
+    if (loading) {
       return;
     }
-    onCodeChange(code);
+    onCodeChange(newCode);
   };
 
   onLoad = async () => {
     const { onCodeChange, inputUrl } = this.state;
+
     this.setState({ loading: true });
 
     const rdfCode = await scraper(inputUrl);
-    this.setState({ loading: false }, () => onCodeChange(rdfCode));
+    this.setState({
+      loading: false,
+    }, () => onCodeChange(rdfCode));
   };
 
   render() {
@@ -69,11 +73,15 @@ class InputResource extends React.PureComponent {
       </Row>
     );
     const codeInputControl = (
-      <CodeBlock
+      <Editor
         className="border border-secondary"
         value={rdfCode}
-        onChange={this.onCodeEdit}
-        readonly={loading}
+        onValueChange={this.onCodeEdit}
+        highlight={(code) => highlight(code, languages.turtle)}
+        style={{
+          fontFamily: '"Fira code", "Fira Mono", monospace',
+          fontSize: 12,
+        }}
       />
     );
 

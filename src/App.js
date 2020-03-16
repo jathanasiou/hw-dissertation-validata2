@@ -33,7 +33,7 @@ class App extends React.Component {
       shapes: [],
       shapeSelection: null,
       schemas: [],
-      schemaSelection: null, // schema selection
+      schemaSelection: null,
       rdfNodes: [],
       rdfNodeSelection: null,
       validationResultRDFShape: null,
@@ -60,6 +60,7 @@ class App extends React.Component {
   };
 
   codeChange = (code) => {
+    console.log('APP:codeChange')
     this.setState({
       rdfCode: code,
       rdfNodeSelection: null,
@@ -80,9 +81,7 @@ class App extends React.Component {
 
   schemaSelectionChange = (schemaSelection) => {
     this.setState({
-      schemaSelection: (schemaSelection)
-        ? schemaSelection.value
-        : null,
+      schemaSelection: schemaSelection || null,
       shapes: (schemaSelection)
         ? SHAPE_TYPES.map((type) => `${schemaSelection.value}${type}`)
         : [],
@@ -165,7 +164,7 @@ class App extends React.Component {
         />
         <SchemaPreviewModal
           show={showSchemaPreview}
-          schemaKey={schemaSelection}
+          schemaKey={(schemaSelection) ? schemaSelection.value : null}
           onHide={this.onSchemaPreviewHidden}
         />
         <h1>Validata2 Validator tool</h1>
