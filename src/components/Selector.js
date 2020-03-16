@@ -3,19 +3,26 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 
 
-const Selector = ({
-  options, onChange, placeholder, value, disabled,
-}) => (
-  <Select
-    className="h-100"
-    isDisabled={disabled}
-    placeholder={placeholder}
-    options={options}
-    onChange={onChange}
-    value={value}
-    isClearable
-  />
-);
+// TODO: look into updates when RDF code is being changed
+class Selector extends React.PureComponent {
+  render() {
+    const {
+      options, onChange, placeholder, value, disabled,
+    } = this.props;
+
+    return (
+      <Select
+        className="h-100"
+        isDisabled={disabled}
+        placeholder={placeholder}
+        options={options}
+        onChange={onChange}
+        value={value}
+        isClearable
+      />
+    );
+  }
+}
 
 Selector.defaultProps = {
   placeholder: '',

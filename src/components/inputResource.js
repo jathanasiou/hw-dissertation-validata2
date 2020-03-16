@@ -45,7 +45,7 @@ class InputResource extends React.PureComponent {
   };
 
   render() {
-    const { inputUrl, loading } = this.state;
+    const { inputUrl } = this.state;
     const { rdfCode } = this.props;
 
     const urlInputControl = (
@@ -54,7 +54,6 @@ class InputResource extends React.PureComponent {
           <Button type="primary" onClick={this.onLoad}>Load</Button>
         </Col>
         <Col>
-          {/* <label htmlFor="basic-url">Type a URL below to retrieve embedded RDF</label> */}
           <InputGroup>
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-url-addon">
@@ -87,7 +86,6 @@ class InputResource extends React.PureComponent {
 
     return (
       <div className="border-bottom pb-2">
-        {`LOADING: ${loading}`}
         <div className="h3">Load from a web resource and/or directly edit the code below</div>
         {urlInputControl}
         {codeInputControl}

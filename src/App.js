@@ -40,7 +40,6 @@ class App extends React.Component {
       showSchemaPreview: false,
       inputMode: 'code',
       rdfCode: datasetExample,
-      // inputUrl: 'https://www.flymine.org/flymine/begin.do',
       error: null,
       errorDetails: null,
     };
@@ -60,7 +59,6 @@ class App extends React.Component {
   };
 
   codeChange = (code) => {
-    console.log('APP:codeChange')
     this.setState({
       rdfCode: code,
       rdfNodeSelection: null,
