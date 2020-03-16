@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button, InputGroup, FormControl, Row, Col,
-  Card,
 } from 'react-bootstrap';
 import Octicon, { Globe, Code } from '@primer/octicons-react';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
+import CardGroup from './CardControlGroup';
 import scraper from '../utils/webScraper';
 import 'prismjs/components/prism-turtle';
 import 'prismjs/themes/prism-coy.css';
@@ -76,6 +76,7 @@ class InputResource extends React.PureComponent {
       <Editor
         className="border border-secondary"
         value={rdfCode}
+        padding={10}
         onValueChange={this.onCodeEdit}
         highlight={(code) => highlight(code, languages.turtle)}
         style={{
@@ -86,17 +87,12 @@ class InputResource extends React.PureComponent {
     );
 
     return (
-      <Card className="shadow">
-        <Card.Header as="h5" className="bg-primary text-white">
-          <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Code} ariaLabel="Structured data panel" />
-          <span>Structured Data</span>
-        </Card.Header>
-        <Card.Body>
-          <Card.Title>Load from a web resource and/or directly edit the code below</Card.Title>
+      <CardGroup header="Structured Data" icon={Code} bodyTitle="Load from a web resource or directly edit the code below">
+        <Fragment>
           {urlInputControl}
           {codeInputControl}
-        </Card.Body>
-      </Card>
+        </Fragment>
+      </CardGroup>
     );
   }
 }

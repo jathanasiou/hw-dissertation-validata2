@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'react-bootstrap';
-import Octicon, { Report } from '@primer/octicons-react';
+import { Report } from '@primer/octicons-react';
 import BootstrapTable from 'react-bootstrap-table-next';
+import CardGroup from './CardControlGroup';
 
 
 const rowDecorator = (row) => ((row.status === 'conformant') ? 'good clickable' : 'bad clickable');
@@ -34,24 +34,17 @@ class RDFShapeResultsPanel extends React.PureComponent {
       : [];
 
     return (
-      <Card className="shadow">
-        <Card.Header as="h5" className="bg-primary text-white">
-          <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Report} ariaLabel="Validation Report panel" />
-          <span>Validation  Report</span>
-        </Card.Header>
-        <Card.Body>
-          <Card.Title>Validation status for each Node-Shape pair</Card.Title>
-          <BootstrapTable
-            bootstrap4
-            bordered={false}
-            keyField="node" // field to use as key
-            data={rows}
-            columns={columns}
-            expandRow={expandRow}
-            rowClasses={rowDecorator}
-          />
-        </Card.Body>
-      </Card>
+      <CardGroup header="Validation  Report" icon={Report} bodyTitle="Validation status for each Node-Shape pair">
+        <BootstrapTable
+          bootstrap4
+          bordered={false}
+          keyField="node" // field to use as key
+          data={rows}
+          columns={columns}
+          expandRow={expandRow}
+          rowClasses={rowDecorator}
+        />
+      </CardGroup>
     );
   }
 }

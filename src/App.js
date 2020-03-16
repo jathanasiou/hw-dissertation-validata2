@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-  Row, Col, Container, Button, Card,
+  Row, Col, Container, Button,
 } from 'react-bootstrap';
 import Octicon, { Beaker, ArrowBoth } from '@primer/octicons-react';
 import InputResource from './components/inputResource';
 import RDFShapeResults from './components/RDFShapeResults';
+import CardGroup from './components/CardControlGroup';
 import Selector from './components/Selector';
 import SchemaPreviewButton from './components/schemaPreviewButton';
 import SchemaPreviewModal from './components/schemaPreviewModal';
@@ -173,19 +174,17 @@ class App extends React.Component {
         </Row>
         <Row>
           <Col xs="12">
-            <Card className="shadow">
-              <Card.Header as="h5" className="bg-primary text-white">
-                <Octicon size="medium" className="inline-icon size30" verticalAlign="middle" icon={Beaker} ariaLabel="Structured data panel" />
-                <span>Bioschemas Profile</span>
-              </Card.Header>
-              <Card.Body>
-                <Card.Title>Select validation parameters</Card.Title>
+            <CardGroup header="Bioschemas Profile" bodyTitle="Select validation parameters" icon={Beaker}>
+              <div>
                 <Row>
                   <Col className="pr-1">
                     <Selector options={schemasOptions} onChange={this.schemaSelectionChange} placeholder="Select a Profile" value={schemaSelection} />
                   </Col>
                   <Col xs="auto" className="pl-1">
-                    <SchemaPreviewButton disabled={!isSchemaSelected} onClick={this.onSchemaPreviewShown} />
+                    <SchemaPreviewButton
+                      disabled={!isSchemaSelected}
+                      onClick={this.onSchemaPreviewShown}
+                    />
                   </Col>
                 </Row>
                 <Row>
@@ -198,9 +197,8 @@ class App extends React.Component {
                   </Col>
                   <Col xs="auto">{validateBtn}</Col>
                 </Row>
-
-              </Card.Body>
-            </Card>
+              </div>
+            </CardGroup>
           </Col>
         </Row>
         <Row>
