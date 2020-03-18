@@ -71,7 +71,7 @@ class InputResource extends React.PureComponent {
           </InputGroup>
         </Col>
         <Col xs="auto">
-          <Button type="primary" onClick={this.onLoad}>Load</Button>
+          <Button disabled={loading} type="primary" onClick={this.onLoad}>Load</Button>
         </Col>
         <Col xs="auto" className={spinnerClass}>
           <Spinner animation="border" variant="primary" />

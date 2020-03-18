@@ -13,6 +13,7 @@ class Selector extends React.PureComponent {
     return (
       <Select
         className="h-100"
+        classNamePrefix="full-height"
         isDisabled={disabled}
         placeholder={placeholder}
         options={options}

@@ -176,8 +176,8 @@ class App extends React.Component {
           <Col xs="12">
             <CardGroup header="Bioschemas Profile" bodyTitle="Select validation parameters" icon={Beaker}>
               <div>
-                <Row>
-                  <Col className="pr-1">
+                <Row className="pb-2">
+                  <Col>
                     <Selector options={schemasOptions} onChange={this.schemaSelectionChange} placeholder="Select a Profile" value={schemaSelection} />
                   </Col>
                   <Col xs="auto" className="pl-1">
@@ -187,15 +187,17 @@ class App extends React.Component {
                     />
                   </Col>
                 </Row>
-                <Row>
-                  <Col>
+                <Row className="justify-content-end">
+                  <Col xs="12" md className="">
                     <Selector options={nodesOptions} onChange={this.nodeSelectionChange} placeholder="Select a Node to validate" value={rdfNodeSelection} />
                   </Col>
-                  <Col xs="auto" className="px-0"><Octicon size="medium" verticalAlign="top" icon={ArrowBoth} /></Col>
-                  <Col>
+                  <Col xs="auto" className="px-0 d-none d-md-block">
+                    <Octicon className="h-100" size="medium" icon={ArrowBoth} />
+                  </Col>
+                  <Col xs="12" md className="pt-3 pt-md-0">
                     <Selector disabled={!isSchemaSelected} options={shapesOptions} onChange={this.shapeSelectionChange} placeholder="Select a Profile Shape to validate against" value={shapeSelection} />
                   </Col>
-                  <Col xs="auto">{validateBtn}</Col>
+                  <Col xs="auto" className="pt-3 pt-md-0">{validateBtn}</Col>
                 </Row>
               </div>
             </CardGroup>
