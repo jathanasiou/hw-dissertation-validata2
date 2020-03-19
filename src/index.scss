@@ -62,9 +62,15 @@ tr {
   }
   &.good {
     background-color: lightgreen;
+    &:hover {
+      background-color: darken(lightgreen, 35%);
+    }
   }
   &.bad {
-    @extend .bg-danger;
+    background-color: #f38d8d;
+    &:hover {
+      background-color: darken(#f38d8d, 15%);
+    }
   }
 }
 
@@ -75,4 +81,42 @@ td.reset-expansion-style {
 
 .full-height__control {
   @extend .h-100;
+}
+
+::-webkit-input-placeholder {
+   font-style: italic;
+}
+:-moz-placeholder {
+   font-style: italic;  
+}
+::-moz-placeholder {
+   font-style: italic;  
+}
+:-ms-input-placeholder {  
+   font-style: italic;
+}
+
+.editor-wrapper {
+  max-height: 300px;
+  overflow: auto;
+  border: 1px solid #ced4da;
+}
+
+.editor {
+  counter-reset: line;
+  & #codeArea {
+    outline: none;
+    padding-left: 60px !important;
+  }
+  & pre {
+    padding-left: 60px !important;
+  }
+  & .editorLineNumber {
+    position: absolute;
+    left: 0px;
+    color: #cccccc;
+    text-align: right;
+    width: 40px;
+    font-weight: 100;
+  }
 }
