@@ -7,23 +7,27 @@ import Octicon, { Globe, Code } from '@primer/octicons-react';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import CardGroup from './CardControlGroup';
-import scraper from '../utils/webScraper';
+
 import 'prismjs/components/prism-turtle';
 import 'prismjs/themes/prism-coy.css';
 
+const hightlightWithLineNumbers = (input, language) => highlight(input, language)
+  .split('\n')
+  .map((line, i) => `<span class='editorLineNumber'>${i + 1}</span>${line}`)
+  .join('\n');
 
 class InputResource extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      inputUrl: 'https://www.flymine.org/flymine/begin.do',
-      loading: false,
+      inputUrl: '',
       onCodeChange: props.onCodeChange,
+      onLoadClick: props.onLoad,
     };
   }
 
-  onUrlChange = (inputUrl) => {
-    this.setState({ inputUrl });
+  onUrlChange = (event) => {
+    this.setState({ inputUrl: event.target.value });
   };
 
   onCodeEdit = (newCode) => {
@@ -35,22 +39,18 @@ class InputResource extends React.PureComponent {
   };
 
   onLoad = async () => {
-    const { onCodeChange, inputUrl } = this.state;
-
-    this.setState({ loading: true });
-
-    const rdfCode = await scraper(inputUrl);
-    this.setState({
-      loading: false,
-    }, () => onCodeChange(rdfCode));
+    const { onLoadClick, inputUrl } = this.state;
+    onLoadClick(inputUrl);
   };
 
   render() {
-    const { inputUrl, loading } = this.state;
-    const { rdfCode } = this.props;
-    const spinnerClass = 'pl-0' + (loading ? '' : ' invisible');
-    const editorClass = 'border border-secondary' +
-      (loading ? ' disabled-code' : '');
+    const { inputUrl } = this.state;
+    const { rdfCode, loading } = this.props;
+    const spinnerClass = `pl-0${ loading ? '' : ' invisible'}`;
+    const loadBtnDisabled = loading || !inputUrl;
+    const editorClass = `editor border border-secondary${
+      loading ? ' disabled-code' : ''}`;
+
 
     const urlInputControl = (
       <Row>
@@ -63,7 +63,7 @@ class InputResource extends React.PureComponent {
             </InputGroup.Prepend>
             <FormControl
               id="basic-url"
-              placeholder="https://myurl.com/RDF_document"
+              placeholder="https://myurl.com/embedded_RDF_document"
               aria-describedby="basic-url-addon"
               value={inputUrl}
               onChange={this.onUrlChange}
@@ -71,7 +71,7 @@ class InputResource extends React.PureComponent {
           </InputGroup>
         </Col>
         <Col xs="auto">
-          <Button disabled={loading} type="primary" onClick={this.onLoad}>Load</Button>
+          <Button disabled={loadBtnDisabled} type="primary" onClick={this.onLoad}>Load</Button>
         </Col>
         <Col xs="auto" className={spinnerClass}>
           <Spinner animation="border" variant="primary" />
@@ -79,21 +79,25 @@ class InputResource extends React.PureComponent {
       </Row>
     );
     const codeInputControl = (
-      <Editor
-        className={editorClass}
-        value={rdfCode}
-        padding={10}
-        onValueChange={this.onCodeEdit}
-        highlight={(code) => highlight(code, languages.turtle)}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 12,
-        }}
-      />
+      <div className="editor-wrapper">
+        <Editor
+          className={editorClass}
+          value={rdfCode}
+          padding={10}
+          textareaId="codeArea"
+          onValueChange={this.onCodeEdit}
+          highlight={(code) => hightlightWithLineNumbers(code, languages.turtle)}
+          style={{
+            fontFamily: '"Fira code", "Fira Mono", monospace',
+            fontSize: 12,
+            outline: 0,
+          }}
+        />
+      </div>
     );
 
     return (
-      <CardGroup header="Structured Data" icon={Code} bodyTitle="Load from a web resource or directly edit the code below">
+      <CardGroup header="Structured Data" icon={Code} bodyTitle="Edit the sample code below or load from a web resource with embedded RDF">
         <Fragment>
           {urlInputControl}
           {codeInputControl}
@@ -106,6 +110,8 @@ class InputResource extends React.PureComponent {
 InputResource.propTypes = {
   onCodeChange: PropTypes.func.isRequired,
   rdfCode: PropTypes.string.isRequired,
+  onLoad: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default InputResource;

@@ -35,11 +35,11 @@ class App extends React.Component {
       shapeSelection: null,
       schemas: [],
       schemaSelection: null,
+      isCrawling: false,
       rdfNodes: [],
       rdfNodeSelection: null,
       validationResultRDFShape: null,
       showSchemaPreview: false,
-      inputMode: 'code',
       rdfCode: datasetExample,
       error: null,
       errorDetails: null,
@@ -55,8 +55,31 @@ class App extends React.Component {
     });
   }
 
-  inputModeChange = (inputMode) => {
-    this.setState({ inputMode });
+  crawlURL = async (url) => {
+    try {
+      this.setState({ isCrawling: true });
+      const rdfCode = await scraper(url);
+      this.setState({ isCrawling: false, rdfCode });
+      this.refreshRDFNodes(rdfCode);
+    } catch (error) {
+      this.setState({
+        isCrawling: false,
+        error: 'Invalid Data resource',
+        errorDetails: error.toString(),
+      });
+      console.error(error);
+    }
+  };
+
+  refreshRDFNodes = (code) => {
+    parseTurtle(code)
+      .then((nodes) => {
+        this.setState({ rdfNodes: nodes });
+      })
+      .catch((err) => {
+        // error because of invalid code
+        this.setState({ rdfNodes: [] });
+      });
   };
 
   codeChange = (code) => {
@@ -64,18 +87,7 @@ class App extends React.Component {
       rdfCode: code,
       rdfNodeSelection: null,
     });
-    parseTurtle(code)
-      .then((nodes) => {
-        this.setState({ rdfNodes: nodes });
-      })
-      .catch((err) => {
-        // console.error(err); // error because of invalid code
-        this.setState({ rdfNodes: [] });
-      });
-  };
-
-  inputUrlChange = (newUrl) => {
-    this.setState({ inputUrl: newUrl });
+    this.refreshRDFNodes(code);
   };
 
   schemaSelectionChange = (schemaSelection) => {
@@ -113,22 +125,24 @@ class App extends React.Component {
 
   runValidation = async () => {
     const {
-      schemas, schemaSelection, rdfCode, inputUrl, inputMode, rdfNodeSelection, shapeSelection,
+      schemas, schemaSelection, rdfCode, rdfNodeSelection, shapeSelection,
     } = this.state;
     let validationResultRDFShape = null;
     try {
       // TODO: crawl web resource before validation
-      const rdfContent = (inputMode === 'code') ? rdfCode : (await scraper(inputUrl));
       const profile = (schemas).find((schema) => schema.name === schemaSelection.value);
       validationResultRDFShape = await validate({
         schema: profile.content,
-        rdf: rdfContent,
+        rdf: rdfCode,
         node: `<${rdfNodeSelection.value}>`,
         shape: `<${shapeSelection.value}>`,
       });
     } catch (ex) {
       console.error(ex);
-      this.setState({ error: 'Problem with parsing the Bioschemas profile.', errorDetails: ex });
+      this.setState({
+        error: 'Problem with parsing the Bioschemas profile.',
+        errorDetails: ex,
+      });
       return;
     }
     this.setState({ validationResultRDFShape });
@@ -136,7 +150,7 @@ class App extends React.Component {
 
   render() {
     const {
-      rdfCode, validationResultRDFShape, error, errorDetails, showSchemaPreview,
+      isCrawling, rdfCode, validationResultRDFShape, error, errorDetails, showSchemaPreview,
       schemas, schemaSelection,
       shapes, shapeSelection,
       rdfNodes, rdfNodeSelection,
@@ -150,6 +164,8 @@ class App extends React.Component {
     const schemasOptions = schemas.map((schema) => ({ label: schema.name, value: schema.name }));
     const shapesOptions = shapes.map((shape) => ({ label: shape, value: shape }));
     const nodesOptions = rdfNodes.map((node) => ({ label: node, value: node }));
+    const nodesSelectPlaceholder = nodesOptions.length ? 'Select a Node to validate' : 'INVALID SOURCE';
+    const nodesSelectDisabled = !nodesOptions.length;
 
     const validateBtn = (<Button onClick={this.runValidation} disabled={!validateBtnEnabled} size="lg">Validate</Button>);
 
@@ -169,7 +185,12 @@ class App extends React.Component {
         <h1>Validata2 Validator tool</h1>
         <Row>
           <Col xs="12">
-            <InputResource rdfCode={rdfCode} onCodeChange={this.codeChange} />
+            <InputResource
+              rdfCode={rdfCode}
+              loading={isCrawling}
+              onCodeChange={this.codeChange}
+              onLoad={this.crawlURL}
+            />
           </Col>
         </Row>
         <Row>
@@ -189,7 +210,7 @@ class App extends React.Component {
                 </Row>
                 <Row className="justify-content-end">
                   <Col xs="12" md className="">
-                    <Selector options={nodesOptions} onChange={this.nodeSelectionChange} placeholder="Select a Node to validate" value={rdfNodeSelection} />
+                    <Selector disabled={nodesSelectDisabled} options={nodesOptions} onChange={this.nodeSelectionChange} placeholder={nodesSelectPlaceholder} value={rdfNodeSelection} />
                   </Col>
                   <Col xs="auto" className="px-0 d-none d-md-block">
                     <Octicon className="h-100" size="medium" icon={ArrowBoth} />

@@ -45,7 +45,8 @@ class SchemaPreviewModal extends React.PureComponent {
           <Editor
             className="border border-secondary"
             value={content}
-            onValueChange={()=>{}}
+            padding={10}
+            onValueChange={() => {}}
             highlight={(code) => highlight(code, languages.turtle)}
             style={{
               fontFamily: '"Fira code", "Fira Mono", monospace',
