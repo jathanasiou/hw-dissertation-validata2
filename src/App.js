@@ -195,7 +195,7 @@ class App extends React.Component {
         </Row>
         <Row>
           <Col xs="12">
-            <CardGroup header="Bioschemas Profile" bodyTitle="Select validation parameters" icon={Beaker}>
+            <CardGroup header="2. Bioschemas Profile" bodyTitle="Select validation parameters" icon={Beaker}>
               <div>
                 <Row className="pb-2">
                   <Col>

@@ -34,7 +34,7 @@ class RDFShapeResultsPanel extends React.PureComponent {
       : [];
 
     return (
-      <CardGroup header="Validation  Report" icon={Report} bodyTitle="Validation status for each Node-Shape pair">
+      <CardGroup header="3. Validation Report" icon={Report} bodyTitle="Validation status for each Node-Shape pair">
         <BootstrapTable
           bootstrap4
           bordered={false}

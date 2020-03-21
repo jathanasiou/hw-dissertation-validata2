@@ -32,7 +32,7 @@ button[disabled]{
 }
 
 .inline-icon {
-	@extend .mx-1;
+	@extend .mr-3;
 }
 
 .inline-icon.size20 {
@@ -97,9 +97,11 @@ td.reset-expansion-style {
 }
 
 .editor-wrapper {
+  // @extend .shadow-sm;
+  @extend .rounded;
   max-height: 300px;
   overflow: auto;
-  border: 1px solid #ced4da;
+  border: 2px inset #ced4da;
 }
 
 .editor {

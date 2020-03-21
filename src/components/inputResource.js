@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button, InputGroup, FormControl, Row, Col, Spinner,
+  Nav, Tab,
 } from 'react-bootstrap';
 import Octicon, { Globe, Code } from '@primer/octicons-react';
 import Editor from 'react-simple-code-editor';
@@ -20,11 +21,16 @@ class InputResource extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      inputMode: 'url',
       inputUrl: '',
       onCodeChange: props.onCodeChange,
       onLoadClick: props.onLoad,
     };
   }
+
+  changeInputMode = (inputMode) => {
+    this.setState({ inputMode });
+  };
 
   onUrlChange = (event) => {
     this.setState({ inputUrl: event.target.value });
@@ -44,16 +50,15 @@ class InputResource extends React.PureComponent {
   };
 
   render() {
-    const { inputUrl } = this.state;
+    const { inputUrl, inputMode } = this.state;
     const { rdfCode, loading } = this.props;
     const spinnerClass = `pl-0${ loading ? '' : ' invisible'}`;
     const loadBtnDisabled = loading || !inputUrl;
-    const editorClass = `editor border border-secondary${
-      loading ? ' disabled-code' : ''}`;
+    const editorClass = `editor${loading ? ' disabled-code' : ''}`;
 
 
     const urlInputControl = (
-      <Row>
+      <Row className="mb-0">
         <Col>
           <InputGroup>
             <InputGroup.Prepend>
@@ -63,7 +68,7 @@ class InputResource extends React.PureComponent {
             </InputGroup.Prepend>
             <FormControl
               id="basic-url"
-              placeholder="https://myurl.com/embedded_RDF_document"
+              placeholder="URL with emdedded RDF data"
               aria-describedby="basic-url-addon"
               value={inputUrl}
               onChange={this.onUrlChange}
@@ -96,12 +101,38 @@ class InputResource extends React.PureComponent {
       </div>
     );
 
-    return (
-      <CardGroup header="Structured Data" icon={Code} bodyTitle="Edit the sample code below or load from a web resource with embedded RDF">
-        <Fragment>
+    const tabs = (
+      <Nav variant="tabs" defaultActiveKey="url">
+        <Nav.Item>
+          <Nav.Link eventKey="url">URL</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="code">Code</Nav.Link>
+        </Nav.Item>
+      </Nav>
+    );
+
+    const tabContents = (
+      <Tab.Content>
+        <Tab.Pane eventKey="url" title="URL">
           {urlInputControl}
+        </Tab.Pane>
+        <Tab.Pane eventKey="code" title="Code">
           {codeInputControl}
-        </Fragment>
+        </Tab.Pane>
+      </Tab.Content>
+    );
+
+    return (
+      <CardGroup header="1. Structured Data" icon={Code} bodyTitle="Validate data from a web resource or test your own Turtle code.">
+        <Tab.Container id="controlled-tab-example" activeKey={inputMode} onSelect={this.changeInputMode}>
+          <Row className="pb-1">
+            <Col>{tabs}</Col>
+          </Row>
+          <Row className="border-top pt-2">
+            <Col className=" ">{tabContents}</Col>
+          </Row>
+        </Tab.Container>
       </CardGroup>
     );
   }
