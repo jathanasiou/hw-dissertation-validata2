@@ -40,14 +40,15 @@ class App extends React.Component {
       rdfNodeSelection: null,
       validationResultRDFShape: null,
       showSchemaPreview: false,
-      rdfCode: datasetExample,
+      rdfCode: '',
       error: null,
       errorDetails: null,
     };
   }
 
   componentDidMount() {
-    parseTurtle(datasetExample).then((nodes) => {
+    const {rdfCode} = this.state;
+    parseTurtle(rdfCode).then((nodes) => {
       this.setState({ rdfNodes: nodes });
     });
     schemasProvider().then((schemas) => {
@@ -55,12 +56,12 @@ class App extends React.Component {
     });
   }
 
-  crawlURL = async (url) => {
+  onCrawlURL = async (url) => {
     try {
       this.setState({ isCrawling: true });
       const rdfCode = await scraper(url);
-      this.setState({ isCrawling: false, rdfCode });
-      this.refreshRDFNodes(rdfCode);
+      this.setState({ isCrawling: false });
+      this.codeChange(rdfCode);
     } catch (error) {
       this.setState({
         isCrawling: false,
@@ -159,13 +160,15 @@ class App extends React.Component {
     const isShapeSelected = (shapeSelection !== null);
     const isNodeSelected = (rdfNodeSelection !== null);
 
-    const validateBtnEnabled = (isSchemaSelected && isNodeSelected && isShapeSelected);
-
     const schemasOptions = schemas.map((schema) => ({ label: schema.name, value: schema.name }));
     const shapesOptions = shapes.map((shape) => ({ label: shape, value: shape }));
     const nodesOptions = rdfNodes.map((node) => ({ label: node, value: node }));
-    const nodesSelectPlaceholder = nodesOptions.length ? 'Select a Node to validate' : 'INVALID SOURCE';
-    const nodesSelectDisabled = !nodesOptions.length;
+
+    const nodesSelectPlaceholder = nodesOptions.length ? 'Select a Node to validate' : 'Invalid Data';
+
+    const validateBtnEnabled = (isSchemaSelected && isNodeSelected && isShapeSelected
+      && !isCrawling);
+    const nodesSelectDisabled = !nodesOptions.length || isCrawling;
 
     const validateBtn = (<Button onClick={this.runValidation} disabled={!validateBtnEnabled} size="lg">Validate</Button>);
 
@@ -189,7 +192,7 @@ class App extends React.Component {
               rdfCode={rdfCode}
               loading={isCrawling}
               onCodeChange={this.codeChange}
-              onLoad={this.crawlURL}
+              onLoad={this.onCrawlURL}
             />
           </Col>
         </Row>

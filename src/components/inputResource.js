@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Button, InputGroup, FormControl, Row, Col, Spinner,
@@ -54,7 +54,7 @@ class InputResource extends React.PureComponent {
     const { rdfCode, loading } = this.props;
     const spinnerClass = `pl-0${ loading ? '' : ' invisible'}`;
     const loadBtnDisabled = loading || !inputUrl;
-    const editorClass = `editor${loading ? ' disabled-code' : ''}`;
+    const editorClass = `editor${(loading || inputMode === 'url') ? ' disabled-code' : ''}`;
 
 
     const urlInputControl = (
@@ -116,6 +116,8 @@ class InputResource extends React.PureComponent {
       <Tab.Content>
         <Tab.Pane eventKey="url" title="URL">
           {urlInputControl}
+          <div className="mt-2">Embedded Data Preview:</div>
+          {codeInputControl}
         </Tab.Pane>
         <Tab.Pane eventKey="code" title="Code">
           {codeInputControl}
