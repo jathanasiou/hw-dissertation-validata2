@@ -12,6 +12,16 @@ import CardGroup from './CardControlGroup';
 import 'prismjs/components/prism-turtle';
 import 'prismjs/themes/prism-coy.css';
 
+
+const datasetExample = `\
+<genid-c7a50d6e828f4595a195f9c67304f6d2-0AE87CB066C8D9CD43117E0C5A3090F0> a <http://schema.org/Dataset>;
+  <http://schema.org/description> "The GeneChip® Drosophila Genome Array is a microarray tool for studying expression of Drosophila melanogaster transcripts.";
+  <http://schema.org/identifier> "http://www.affymetrix.com/products/arrays/specific/fly.affx";
+  <http://schema.org/name> "Affymetrix array: GeneChip Drosophila Genome 2.0 Array";
+  <http://schema.org/keywords> "buzzword";
+  <http://schema.org/url> <https://www.flymine.org/flymine/dataset> .
+`;
+
 const hightlightWithLineNumbers = (input, language) => highlight(input, language)
   .split('\n')
   .map((line, i) => `<span class='editorLineNumber'>${i + 1}</span>${line}`)
@@ -42,6 +52,10 @@ class InputResource extends React.PureComponent {
       return;
     }
     onCodeChange(newCode);
+  };
+
+  onSampleCode = () => {
+    this.onCodeEdit(datasetExample);
   };
 
   onLoad = async () => {
@@ -120,6 +134,7 @@ class InputResource extends React.PureComponent {
           {codeInputControl}
         </Tab.Pane>
         <Tab.Pane eventKey="code" title="Code">
+          <Button onClick={this.onSampleCode} className="mb-2">Use sample code</Button>
           {codeInputControl}
         </Tab.Pane>
       </Tab.Content>
