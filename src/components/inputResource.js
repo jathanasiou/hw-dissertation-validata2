@@ -15,12 +15,12 @@ import 'prismjs/themes/prism-coy.css';
 
 const datasetExample = `{
   "@id":"http://njh.me/genid-c7a50d6e828f4595a195f9c67304f6d2-0AE87CB066C8D9CD43117E0C5A3090F0",
-  "@type":["http://schema.org/Dataset"],
-  "http://schema.org/description": "The GeneChip® Drosophila Genome Array is a microarray tool for studying expression of Drosophila melanogaster transcripts.",
-  "http://schema.org/identifier": "http://www.affymetrix.com/products/arrays/specific/fly.affx",
-  "http://schema.org/name": "Affymetrix array: GeneChip Drosophila Genome 2.0 Array",
-  "http://schema.org/keywords": "gene tool",
-  "http://schema.org/url": [{"@id":"https://www.flymine.org/flymine/dataset"}]
+  "@type":["https://schema.org/Dataset"],
+  "https://schema.org/description": "The GeneChip® Drosophila Genome Array is a microarray tool for studying expression of Drosophila melanogaster transcripts.",
+  "https://schema.org/identifier": "http://www.affymetrix.com/products/arrays/specific/fly.affx",
+  "https://schema.org/name": "Affymetrix array: GeneChip Drosophila Genome 2.0 Array",
+  "https://schema.org/keywords": "gene tool",
+  "https://schema.org/url": [{"@id":"https://www.flymine.org/flymine/dataset"}]
 }`;
 
 const hightlightWithLineNumbers = (input, language) => highlight(input, language)

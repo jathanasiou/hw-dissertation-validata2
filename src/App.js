@@ -175,22 +175,6 @@ class App extends React.Component {
         />
         <h1>Validata2 Validator tool</h1>
         <Row>
-          <Col xs="6">
-            <h3>Made by:</h3>
-            <ul>
-              <li>John Athanasiou (Author) - ia50 [at] hw [dot] ac [dot] uk</li>
-              <li>Dr. Alasdair Gray (MSc project supervisor) - A.J.G.Gray [at] hw [dot] ac [dot] uk</li>
-            </ul>
-          </Col>
-          <Col xs="6">
-            <h3>Source code</h3>
-            <div>
-              {'Hosted on '}
-              <a href="https://github.com/jathanasiou/hw-dissertation-validata2">Github</a>
-            </div>
-          </Col>
-        </Row>
-        <Row>
           <Col xs="12">
             <InputResource
               rdfCode={rdfCode}
@@ -233,6 +217,22 @@ class App extends React.Component {
         </Row>
         <Row>
           <Col><RDFShapeResults validationResult={validationResultRDFShape} /></Col>
+        </Row>
+        <Row>
+          <Col xs="6">
+            <h3>Made by:</h3>
+            <ul>
+              <li>John Athanasiou (Author) - ia50 [at] hw [dot] ac [dot] uk</li>
+              <li>Dr. Alasdair Gray (MSc project supervisor) - A.J.G.Gray [at] hw [dot] ac [dot] uk</li>
+            </ul>
+          </Col>
+          <Col xs="6">
+            <h3>Source code</h3>
+            <div>
+              {'Hosted on '}
+              <a href="https://github.com/jathanasiou/hw-dissertation-validata2">Github</a>
+            </div>
+          </Col>
         </Row>
       </Container>
     );
