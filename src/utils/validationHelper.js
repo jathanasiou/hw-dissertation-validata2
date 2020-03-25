@@ -1,8 +1,9 @@
 // import qs from 'query-string';
 import { Parser } from 'n3';
+import * as jsonld from 'jsonld';
 
-const parser = new Parser({ format: 'Turtle' });
 
+const parserTurtle = new Parser({ format: 'Turtle' });
 
 const API = 'http://rdfshape.weso.es:8080/api';
 
@@ -13,7 +14,7 @@ async function getFormats() {
 function parseTurtle(rdf) {
   return new Promise((resolve, reject) => {
     const subjects = new Set();
-    parser.parse(rdf, (error, quad, prefixes) => {
+    parserTurtle.parse(rdf, (error, quad, prefixes) => {
       if (error) reject(error);
       if (quad) {
         subjects.add(quad.subject.id);
@@ -24,23 +25,34 @@ function parseTurtle(rdf) {
   });
 }
 
+async function parseJsonld(rdf) {
+  const nquads = await jsonld.toRDF(JSON.parse(rdf), {
+    // base: window.location.href,
+    format: 'application/n-quads',
+  });
+  // console.log('parsed nquads', nquads);
+  const subjects = nquads.match(/^\S+/gm);
+
+  // ensuring uniqueness
+  return [...new Set(subjects)];
+}
+
 async function validate({
   schema, rdf, shape, node,
 }) {
-  console.log(...arguments)
   const formData = new FormData();
   // formData.append('activeTab', '#dataTextArea');
-  // formData.append('dataFormatTextArea', 'TURTLE');
+  // formData.append('dataFormatTextArea', 'JSON-LD');
   // formData.append('schemaFormatTextArea', 'ShExC');
   // formData.append('shapeMapActiveTab', '#shapeMapTextArea');
   // formData.append('shapeMapFormatTextArea', 'Compact');
   // formData.append('activeSchemaTab', '#schemaTextArea');
-  formData.append('dataFormat', 'TURTLE');
+  formData.append('dataFormat', 'JSON-LD');
   formData.append('data', rdf);
   formData.append('schemaEmbedded', false);
   formData.append('schemaFormat', 'ShExC');
   formData.append('schema', schema);
-  formData.append('shapeMapFormat', 'ShExC');
+  formData.append('shapeMapFormat', 'Compact');
   formData.append('shapeMap', `${node}@${shape}`);
   formData.append('schemaEngine', 'ShEx');
   formData.append('triggerMode', 'shapeMap');
@@ -51,5 +63,6 @@ async function validate({
 export {
   getFormats,
   parseTurtle,
+  parseJsonld,
   validate,
 };

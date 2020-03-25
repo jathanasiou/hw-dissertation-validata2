@@ -10,9 +10,9 @@ import Selector from './components/Selector';
 import SchemaPreviewButton from './components/schemaPreviewButton';
 import SchemaPreviewModal from './components/schemaPreviewModal';
 import ErrorWindow from './components/errorWindow';
-import { parseTurtle, validate } from './utils/validationHelper';
+import { parseJsonld, validate } from './utils/validationHelper';
 import schemasProvider from './schemas';
-import scraper from './utils/webScraper';
+import { jsonldScraper as scraper } from './utils/webScraper';
 
 
 const SHAPE_TYPES = ['Minimum', 'Recommended', 'Optional'];
@@ -37,10 +37,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const {rdfCode} = this.state;
-    parseTurtle(rdfCode).then((nodes) => {
-      this.setState({ rdfNodes: nodes });
-    });
+    const { rdfCode } = this.state;
+    this.refreshRDFNodes(rdfCode);
     schemasProvider().then((schemas) => {
       this.setState({ schemas });
     });
@@ -53,24 +51,23 @@ class App extends React.Component {
       this.setState({ isCrawling: false });
       this.codeChange(rdfCode);
     } catch (error) {
+      console.error(error);
       this.setState({
         isCrawling: false,
         error: 'Invalid Data resource',
         errorDetails: error.toString(),
       });
-      console.error(error);
     }
   };
 
-  refreshRDFNodes = (code) => {
-    parseTurtle(code)
-      .then((nodes) => {
-        this.setState({ rdfNodes: nodes });
-      })
-      .catch((err) => {
-        // error because of invalid code
-        this.setState({ rdfNodes: [] });
-      });
+  refreshRDFNodes = async (code) => {
+    try {
+      const rdfNodes = await parseJsonld(code);
+      this.setState({ rdfNodes });
+    } catch (err) {
+      // console.error(err);
+      this.setState({ rdfNodes: [] });
+    }
   };
 
   codeChange = (code) => {
@@ -85,7 +82,7 @@ class App extends React.Component {
     this.setState({
       schemaSelection: schemaSelection || null,
       shapes: (schemaSelection)
-        ? SHAPE_TYPES.map((type) => `${schemaSelection.value}${type}`)
+        ? SHAPE_TYPES.map((type) => `<${schemaSelection.value}${type}>`)
         : [],
       shapeSelection: null,
     });
@@ -125,9 +122,10 @@ class App extends React.Component {
       validationResultRDFShape = await validate({
         schema: profile.content,
         rdf: rdfCode,
-        node: `<${rdfNodeSelection.value}>`,
-        shape: `<${shapeSelection.value}>`,
+        node: `${rdfNodeSelection.value}`,
+        shape: `${shapeSelection.value}`,
       });
+      if (validationResultRDFShape.message.startsWith('Error:')) throw validationResultRDFShape.message;
     } catch (ex) {
       console.error(ex);
       this.setState({
@@ -176,6 +174,22 @@ class App extends React.Component {
           onHide={this.onSchemaPreviewHidden}
         />
         <h1>Validata2 Validator tool</h1>
+        <Row>
+          <Col xs="6">
+            <h3>Made by:</h3>
+            <ul>
+              <li>John Athanasiou (Author) - ia50 [at] hw [dot] ac [dot] uk</li>
+              <li>Dr. Alasdair Gray (MSc project supervisor) - A.J.G.Gray [at] hw [dot] ac [dot] uk</li>
+            </ul>
+          </Col>
+          <Col xs="6">
+            <h3>Source code</h3>
+            <div>
+              {'Hosted on '}
+              <a href="https://github.com/jathanasiou/hw-dissertation-validata2">Github</a>
+            </div>
+          </Col>
+        </Row>
         <Row>
           <Col xs="12">
             <InputResource

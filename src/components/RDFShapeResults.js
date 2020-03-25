@@ -29,9 +29,12 @@ const expandRow = {
 class RDFShapeResultsPanel extends React.PureComponent {
   render() {
     const { validationResult } = this.props;
-    const rows = validationResult
+    let rows = validationResult
       ? validationResult.shapeMap || []
       : [];
+
+    // cleaning up display of Shape names
+    rows = rows.map((item) => ({ ...item, shape: item.shape.replace('internal://base/', '') }));
 
     return (
       <CardGroup header="3. Validation Report" icon={Report} bodyTitle="Validation status for each Node-Shape pair">
