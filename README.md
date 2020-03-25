@@ -17,6 +17,20 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Bioschemas Profiles (in the form of ShEx schemas) can be placed under `/src/schemas` and will be automatically made available by the index file. Webpack's configuration will also serve those files under `<hosted_url>/static/media/`.
 
+## Local running/testing
+
+In order to run in your local computer (after `git clone`-ing the project) you need to:
+
+```bash
+npm install
+```
+to get the dependencies. Then:
+
+```bash
+npm start
+```
+to run the application in development mode. Should automatically open a browser window with it running on localhost.
+
 ## Deployment
 
 In order to deploy the app a build needs to be produced via
