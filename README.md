@@ -24,7 +24,7 @@ Each schema's filename (before extension) will be used as a display name in the 
 ### External Services
 The **SWeL RDF Scraper** service (http://lxbisel.macs.hw.ac.uk:8080/scraper/#api-Developers) is needed for retrieving the RDF embedded in websites. The module for handling that is 
 
-src/utils/webScraper.js
+`src/utils/webScraper.js`
 
 which provides the functions:
 * `turtleScraper(rdfResource)`
@@ -34,7 +34,7 @@ which take a resource URL as input.
 
 The **RDFShape** project API (https://app.swaggerhub.com/apis-docs/labra/rdfshape/1.0.1) is utilized for performing validations. Specifically the `POST /validate` endpoint. The helper module for this is 
 
-src/utils/webScraper.js
+`src/utils/webScraper.js`
 
 which provides the `validate` function that forms a request to the `/validate` endpoint, containing the required data.
 
