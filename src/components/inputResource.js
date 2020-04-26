@@ -4,6 +4,7 @@ import {
   Button, InputGroup, FormControl, Row, Col, Spinner,
   Nav, Tab,
 } from 'react-bootstrap';
+import { parseUrl } from 'query-string';
 import Octicon, { Globe, Code } from '@primer/octicons-react';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
@@ -31,12 +32,19 @@ const hightlightWithLineNumbers = (input, language) => highlight(input, language
 class InputResource extends React.PureComponent {
   constructor(props) {
     super(props);
+
+    const queryParams = parseUrl(window.location.href).query;
+
     this.state = {
       inputMode: 'url',
-      inputUrl: '',
+      inputUrl: queryParams.url || '',
       onCodeChange: props.onCodeChange,
       onLoadClick: props.onLoad,
     };
+
+    if (queryParams.url) {
+      props.onLoad(queryParams.url);
+    }
   }
 
   changeInputMode = (inputMode) => {

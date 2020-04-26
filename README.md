@@ -6,6 +6,7 @@ Validation of RDF documents with Bioschemas profiles. Supports:
 * User input with on-the-fly editing
 * Missing/invalid properties output (structure is WIP)
 * Web page markup embedded RDF code
+* Query parameter (`?url=...`) for loading web page markup on startup
 
 <hr>
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
