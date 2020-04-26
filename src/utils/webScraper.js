@@ -5,12 +5,14 @@ import qs from 'query-string';
 const crawlerService = 'http://lxbisel.macs.hw.ac.uk:8080';
 
 async function turtleScraper(rdfResource) {
+  if (typeof rdfResource !== 'string') throw new Error('Invalid resource URL, expecting string.');
+  const url = rdfResource.trim();
   const response = (await fetch(
     qs.stringifyUrl({
       url: `${crawlerService}/scraper/getRDF`,
       query: {
         output: 'turtle', // defaults to json-ld
-        url: rdfResource,
+        url,
       },
     }),
   ));
@@ -24,11 +26,14 @@ async function turtleScraper(rdfResource) {
 }
 
 async function jsonldScraper(rdfResource) {
+  if (typeof rdfResource !== 'string') throw new Error('Invalid resource URL, expecting string.');
+  const url = rdfResource.trim();
+
   const response = (await fetch(
     qs.stringifyUrl({
       url: `${crawlerService}/scraper/getRDF`,
       query: {
-        url: rdfResource,
+        url,
       },
     }),
   ));
