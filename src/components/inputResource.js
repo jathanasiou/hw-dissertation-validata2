@@ -11,6 +11,7 @@ import { highlight, languages } from 'prismjs/components/prism-core';
 import CardGroup from './CardControlGroup';
 
 import 'prismjs/components/prism-turtle';
+import 'prismjs/components/prism-json'
 import 'prismjs/themes/prism-coy.css';
 
 
@@ -114,7 +115,7 @@ class InputResource extends React.PureComponent {
           padding={10}
           textareaId="codeArea"
           onValueChange={this.onCodeEdit}
-          highlight={(code) => hightlightWithLineNumbers(code, languages.turtle)}
+          highlight={(code) => hightlightWithLineNumbers(code, languages.json)}
           style={{
             fontFamily: '"Fira code", "Fira Mono", monospace',
             fontSize: 12,
