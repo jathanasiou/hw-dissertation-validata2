@@ -3,6 +3,8 @@
 # http://bioschemas.org/profiles/Gene/0.7-RELEASE/
 
 PREFIX schema: <http://schema.org/>
+PREFIX bs: <https://bioschemas.org/>
+
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -13,7 +15,19 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 start = @<GeneMinimum>
 
 <GeneMinimum> {
-  rdf:type [schema:Gene] ;
-  schema:identifier xsd:string OR @<URL> OR {a [schema:PropertyValue]} OR IRI  ;
-  schema:name xsd:string  ;
+  $bs:minimum (
+    rdf:type [schema:Gene] ;
+    schema:identifier xsd:string OR @<URL> OR { a [schema:PropertyValue] } OR IRI  ;
+    schema:name xsd:string  ;
+  );
+}
+
+<GeneRecommended> {
+  $bs:recommended (
+    &bs:minimum ;
+    schema:description xsd:string ? ;
+    schema:encodesBioChemEntity {a [schema:BioChemEntity]} OR IRI *;
+    schema:isPartOfBioChemEntity  {a [schema:BioChemEntity]} OR IRI * ;
+    schema:url @<URL> ? ;
+  );
 }
