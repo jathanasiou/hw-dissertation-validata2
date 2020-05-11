@@ -15,7 +15,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 start = @<GeneMinimum>
 
 <GeneMinimum> {
-  $bs:minimum (
+  $bs:geneMinimumShEx (
     rdf:type [schema:Gene] ;
     schema:identifier xsd:string OR @<URL> OR { a [schema:PropertyValue] } OR IRI  ;
     schema:name xsd:string  ;
@@ -23,11 +23,50 @@ start = @<GeneMinimum>
 }
 
 <GeneRecommended> {
-  $bs:recommended (
-    &bs:minimum ;
+  $bs:geneRecommendedShEx (
+    &bs:geneMinimumShEx ;
     schema:description xsd:string ? ;
     schema:encodesBioChemEntity {a [schema:BioChemEntity]} OR IRI *;
     schema:isPartOfBioChemEntity  {a [schema:BioChemEntity]} OR IRI * ;
     schema:url @<URL> ? ;
   );
+}
+
+<GeneOptional> {
+  $bs:geneOptionalShEx (
+    &bs:geneRecommendedShEx;
+    schema:alternateName xsd:string * ;
+    schema:alternativeOf @<GeneMinimum> OR IRI * ;
+    schema:associatedDisease @<URL> OR @<MedicalConditionOrPropertyValue> OR IRI * ;
+    schema:expressedIn @<URL> OR @<AnatomicalStructureOrAnatomicalSystemOrBioChemEntityOrDefinedTerm> *;
+    schema:hasBioChemEntityPart @<URL> OR {a [schema:BioChemEntity]} OR IRI * ;
+    schema:hasBioPolymerSequence xsd:string ;
+    schema:hasMolecularFunction @<URL> OR @<DefinedTermOrPropertyValue> OR IRI * ;
+    schema:hasRepresentation xsd:string OR @<URL> OR {a [schema:PropertyValue]} OR IRI * ;
+    schema:hasStatus ["pseudogene" "dead" "killed" "live" "predicted" "suppressed"];
+    schema:image @<URL> OR {a [schema:ImageObject]} OR IRI ;
+    schema:isInvolvedInBiologicalProcess @<URL> OR @<DefinedTermOrPropertyValue> OR IRI * ;
+    schema:isLocatedInSubcellularLocation @<URL> OR @<DefinedTermOrPropertyValue> OR IRI * ;
+    schema:mainEntityOfPage @<URL> OR {a [schema:CreativeWork]} OR IRI ? ;
+    schema:sameAs @<URL> * ;
+    schema:taxonomicRange xsd:string OR @<URL> OR @<DefinedTermOrTaxon> OR IRI * ;
+  );
+}
+
+## Additionally defined types
+
+<AnatomicalStructureOrAnatomicalSystemOrBioChemEntityOrDefinedTerm>{
+  rdf:type [ schema:AnatomicalStructure schema:AnatomicalSystem schema:BioChemEntity schema:DefinedTerm]
+}
+
+<DefinedTermOrPropertyValue>{
+  rdf:type [ schema:DefinedTerm schema:PropertyValue]
+}
+
+<DefinedTermOrTaxon>{
+  rdf:type [ schema:DefinedTerm schema:Taxon]
+}
+
+<MedicalConditionOrPropertyValue>{
+  rdf:type [ schema:MedicalCondition schema:PropertyValue]
 }
