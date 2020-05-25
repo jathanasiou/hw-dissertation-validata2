@@ -109,7 +109,6 @@ class InputResource extends React.PureComponent {
     );
     const codeInputControl = (
       <div className="editor-wrapper">
-        <p>Please remove any references to Schema.org's context in your code. We currently have a CORS bug which is preventing us from pulling this in and stops the validator from operating.</p>
         <Editor
           className={editorClass}
           value={rdfCode}
