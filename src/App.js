@@ -125,7 +125,13 @@ class App extends React.Component {
         node: `${rdfNodeSelection.value}`,
         shape: `${shapeSelection.value}`,
       });
-      if (!validationResultRDFShape.valid) throw validationResultRDFShape.error;
+      console.log(validationResultRDFShape);
+      if (!validationResultRDFShape.valid) {
+        console.error("External service error" + validationResultRDFShape.error);
+        const msg = validationResultRDFShape.error;
+        validationResultRDFShape.error = "RDFShape Service " + msg;
+        throw validationResultRDFShape.error;
+      }
       if (validationResultRDFShape.message.startsWith('Error:')) throw validationResultRDFShape.message;
     } catch (ex) {
       console.error(ex);
