@@ -116,8 +116,7 @@ class App extends React.Component {
       schemas, schemaSelection, rdfCode, rdfNodeSelection, shapeSelection,
     } = this.state;
     let validationResultRDFShape = null;
-    try {
-      // TODO: crawl web resource before validation
+    try {      
       const profile = (schemas).find((schema) => schema.name === schemaSelection.value);
       validationResultRDFShape = await validate({
         schema: profile.content,
