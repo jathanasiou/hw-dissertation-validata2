@@ -33,16 +33,16 @@ function parseTurtle(rdf) {
 // defining both http and https separately
 const CONTEXTS = {
   'http://schema.org': {
-    '@context': 'https://schema.org/docs/jsonldcontext.jsonld',
+    '@context': 'http://www.macs.hw.ac.uk/SWeL/schemas/jsonldcontext.8.0.jsonld',
   },
   'https://schema.org': {
-    '@context': 'https://schema.org/docs/jsonldcontext.jsonld',
+    '@context': 'http://www.macs.hw.ac.uk/SWeL/schemas/jsonldcontext.8.0.jsonld',
   },
   'http://schema.org/': {
-    '@context': 'https://schema.org/docs/jsonldcontext.jsonld',
+    '@context': 'http://www.macs.hw.ac.uk/SWeL/schemas/jsonldcontext.8.0.jsonld',
   },
   'https://schema.org/': {
-    '@context': 'https://schema.org/docs/jsonldcontext.jsonld',
+    '@context': 'http://www.macs.hw.ac.uk/SWeL/schemas/jsonldcontext.8.0.jsonld',
   }
 };
 
@@ -79,6 +79,15 @@ async function parseJsonld(rdf) {
 async function validate({
   schema, rdf, shape, node,
 }) {
+
+  // Workaround to overcome issues with schema.org not resolving context properly
+  const nquads = await jsonld.toRDF(JSON.parse(rdf), {
+    // base: window.location.href,
+    format: 'application/n-quads',
+  });
+  console.log("nquads: " + nquads);
+  // End of workaround WPAdBlock
+
   const formData = new FormData();
   // formData.append('activeTab', '#dataTextArea');
   // formData.append('dataFormatTextArea', 'JSON-LD');
@@ -86,8 +95,14 @@ async function validate({
   // formData.append('shapeMapActiveTab', '#shapeMapTextArea');
   // formData.append('shapeMapFormatTextArea', 'Compact');
   // formData.append('activeSchemaTab', '#schemaTextArea');
-  formData.append('dataFormat', 'JSON-LD');
-  formData.append('data', rdf);
+
+  // Workaround to overcome issues with schema.org not resolving context properly
+  // formData.append('dataFormat', 'JSON-LD');
+  // formData.append('data', rdf);
+  formData.append('dataFormat', 'n-triples');
+  formData.append('data', nquads);
+  // End of workaround
+
   formData.append('schemaEmbedded', false);
   formData.append('schemaFormat', 'ShExC');
   formData.append('schema', schema);
