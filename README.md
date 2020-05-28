@@ -64,3 +64,7 @@ $ npm run build
 Afterwards, the contents of the `build` subdirectory can be placed in the serving directory of a web server.
 
 *Note:* the `"homepage":` entry in `package.json` needs to contain the full URL path where the app will be served from. This path will also be appended to `localhost:3000` when running locally via `npm run start`.
+
+## Schema.org Context Issue
+
+In May 2020 there was an issue with the serving of Schema.org's context file. To overcome this and permit validations to proceed a workaround was put in place (see 1623545 and #4). This uses a version of the Schema.org context file stored on the MACS server and then converts the JSON-LD to nquads before submitting to the RDFShapes service for validation.
