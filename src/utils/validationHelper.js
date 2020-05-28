@@ -37,6 +37,12 @@ const CONTEXTS = {
   },
   "https://schema.org": {
     "@context": "https://schema.org/docs/jsonldcontext.jsonld"
+  },
+  "http://schema.org/": {
+    "@context": "https://schema.org/docs/jsonldcontext.jsonld"
+  },
+  "https://schema.org/": {
+    "@context": "https://schema.org/docs/jsonldcontext.jsonld"
   }
 };
 
