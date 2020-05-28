@@ -25,37 +25,37 @@ function parseTurtle(rdf) {
   });
 }
 
-//OVERRIDE schema.org context (this is to avoid CORS problems)
-//Approach comes from the jsonld.js documentation for using a customLoader
-//https://github.com/digitalbazaar/jsonld.js/blob/b6862c711c286547c0cbf442b83d0f3bb8f8fd0a/README.md#custom-document-loader
+// OVERRIDE schema.org context (this is to avoid CORS problems)
+// Approach comes from the jsonld.js documentation for using a customLoader
+// https://github.com/digitalbazaar/jsonld.js/blob/b6862c711c286547c0cbf442b83d0f3bb8f8fd0a/README.md#custom-document-loader
 
 // define a mapping of context URL => context doc
 // defining both http and https separately
 const CONTEXTS = {
-  "http://schema.org": {
-    "@context": "https://schema.org/docs/jsonldcontext.jsonld"
+  'http://schema.org': {
+    '@context': 'https://schema.org/docs/jsonldcontext.jsonld',
   },
-  "https://schema.org": {
-    "@context": "https://schema.org/docs/jsonldcontext.jsonld"
+  'https://schema.org': {
+    '@context': 'https://schema.org/docs/jsonldcontext.jsonld',
   },
-  "http://schema.org/": {
-    "@context": "https://schema.org/docs/jsonldcontext.jsonld"
+  'http://schema.org/': {
+    '@context': 'https://schema.org/docs/jsonldcontext.jsonld',
   },
-  "https://schema.org/": {
-    "@context": "https://schema.org/docs/jsonldcontext.jsonld"
+  'https://schema.org/': {
+    '@context': 'https://schema.org/docs/jsonldcontext.jsonld',
   }
 };
 
 // grab the XHR doc loader
-const nodeDocumentLoader = jsonld.documentLoaders.xhr()
+const nodeDocumentLoader = jsonld.documentLoaders.xhr();
 
 // change the default document loader
 const customLoader = async (url, options) => {
-  if(url in CONTEXTS) {
+  if (url in CONTEXTS) {
     return {
       contextUrl: null, // this is for a context via a link header
       document: CONTEXTS[url], // this is the actual document that was loaded
-      documentUrl: url // this is the actual context URL after redirects
+      documentUrl: url, // this is the actual context URL after redirects
     };
   }
   // call the default documentLoader
