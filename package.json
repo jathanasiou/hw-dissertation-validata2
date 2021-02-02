@@ -1,6 +1,6 @@
 {
   "name": "validata2",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "homepage": "http://www.macs.hw.ac.uk/SWeL/BioschemasValidator/",
   "dependencies": {
