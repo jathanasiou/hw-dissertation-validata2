@@ -2,7 +2,7 @@
 import qs from 'query-string';
 // import * as jsonld from 'jsonld';
 
-const crawlerService = 'http://lxbisel.macs.hw.ac.uk:8080';
+const crawlerService = 'https://swel.macs.hw.ac.uk';
 
 async function turtleScraper(rdfResource) {
   if (typeof rdfResource !== 'string') throw new Error('Invalid resource URL, expecting string.');

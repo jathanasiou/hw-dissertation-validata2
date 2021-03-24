@@ -24,7 +24,7 @@ Each schema's filename (before extension) will be used as a display name in the 
 * \<FILENAMEOptional> 
 
 ### External Services
-The **SWeL RDF Scraper** service (http://lxbisel.macs.hw.ac.uk:8080/scraper/#api-Developers) is needed for retrieving the RDF embedded in websites. The module for handling that is 
+The **SWeL RDF Scraper** service (https://swel.macs.hw.ac.uk/scraper/#api-Developers) is needed for retrieving the RDF embedded in websites. The module for handling that is 
 
 `src/utils/webScraper.js`
 
