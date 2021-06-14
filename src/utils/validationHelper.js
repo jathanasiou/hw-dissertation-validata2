@@ -5,7 +5,7 @@ import * as jsonld from 'jsonld';
 
 const parserTurtle = new Parser({ format: 'Turtle' });
 
-const API = 'https://rdfshape.weso.es:8080/api';
+const API = 'https://api.rdfshape.weso.es/api';
 
 async function getFormats() {
   return (await fetch(`${API}/data/formats`)).json();
