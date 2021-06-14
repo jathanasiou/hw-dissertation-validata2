@@ -79,8 +79,9 @@ async function parseJsonld(rdf) {
 async function validate({
   schema, rdf, shape, node,
 }) {
+  console.log("json-ld: " + rdf);
 
-  // Workaround to overcome issues with schema.org not resolving context properly
+    // Workaround to overcome issues with schema.org not resolving context properly
   const nquads = await jsonld.toRDF(JSON.parse(rdf), {
     // base: window.location.href,
     format: 'application/n-quads',
@@ -97,10 +98,10 @@ async function validate({
   // formData.append('activeSchemaTab', '#schemaTextArea');
 
   // Workaround to overcome issues with schema.org not resolving context properly
-  // formData.append('dataFormat', 'JSON-LD');
-  // formData.append('data', rdf);
-  formData.append('dataFormat', 'n-triples');
-  formData.append('data', nquads);
+  formData.append('dataFormat', 'JSON-LD');
+  formData.append('data', rdf);
+  // formData.append('dataFormat', 'n-quads');
+  // formData.append('data', nquads);
   // End of workaround
 
   formData.append('schemaEmbedded', false);
