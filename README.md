@@ -34,7 +34,9 @@ which provides the functions:
 
 which take a resource URL as input.
 
-The **RDFShape** project API (https://app.swaggerhub.com/apis-docs/labra/rdfshape/1.0.1) is utilized for performing validations. Specifically the `POST /validate` endpoint. The helper module for this is 
+The **RDFShape** project API (https://app.swaggerhub.com/apis-docs/labra/rdfshape/1.0.1) is utilized for performing validations. Specifically the `POST /validate` endpoint. *Note that the swagger documentation points to an old server location (see issue [weso:shaclex#424](https://github.com/weso/shaclex/issues/424)).*
+
+The helper module for this is 
 
 `src/utils/webScraper.js`
 
