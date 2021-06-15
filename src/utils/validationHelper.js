@@ -98,10 +98,13 @@ async function validate({
   // formData.append('activeSchemaTab', '#schemaTextArea');
 
   // Workaround to overcome issues with schema.org not resolving context properly
-  formData.append('dataFormat', 'JSON-LD');
-  formData.append('data', rdf);
-  // formData.append('dataFormat', 'n-quads');
-  // formData.append('data', nquads);
+  if (rdf.includes("@context")) {
+    formData.append('dataFormat', 'n-quads');
+    formData.append('data', nquads);
+  } else {
+    formData.append('dataFormat', 'JSON-LD');
+    formData.append('data', rdf);
+  }
   // End of workaround
 
   formData.append('schemaEmbedded', false);
